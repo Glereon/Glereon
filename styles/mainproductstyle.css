@@ -101,7 +101,7 @@
     padding: 0;
     background-color: #111420;
     border-style: none;
-    width: 150px;
+    width: 170px;
     height: 350px;
     display: inline-block;
     text-align: center;
@@ -110,13 +110,14 @@
     vertical-align: top;
     
     
+    
 }
 .img-container {
     width: 100px;
     height: 150px;;
     border-style: none;
     padding: 0;
-    margin-left:17%;
+    margin-left:21%;
     margin-bottom: 20px;
     margin-top: 20px;
     

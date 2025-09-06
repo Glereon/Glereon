@@ -124,7 +124,7 @@
     .nav-menu a {
       color: white;
       text-decoration: none;
-      font-size: 0.5em;
+      font-size: 0.7em;
       transition: color 0.3s;
     }
     .nav-menu a:hover {
@@ -136,20 +136,24 @@
       padding: 10px;
       background: #fe7300;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: background 0.3s;
+    }
+    .cart-icon2 {
+      font-size: 0.8rem;
+      
     }
     .cart-icon:hover {
       background: #d85f00;
     }
     .cart-count {
       position: absolute;
-      top: -5px;
-      right: -5px;
+      top: -7px;
+      right: -7px;
       background: #ff4444;
       color: white;
       border-radius: 50%;

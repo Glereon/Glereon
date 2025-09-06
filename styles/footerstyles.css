@@ -74,9 +74,10 @@
 }
 .terms {
     display: block;
-    width: 10rem;
+    width: 5rem;
     height: 50px;
     margin-left: 1rem;
+    margin-right: 1rem;
 }
 .policy {
     display: flex;
@@ -115,12 +116,12 @@
 .termshyper {
     color: white;
     text-decoration: none;
-    font-size: 1.5em;
+    font-size: 1em;
 }
 .policyhyper {
     color: white;
     text-decoration: none;
-    font-size: 1.5em;
+    font-size: 1em;
 }
 .bank-logos-box {
   gap: 10px;
