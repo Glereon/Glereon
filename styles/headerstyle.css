@@ -136,8 +136,8 @@
       padding: 10px;
       background: #fe7300;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -153,16 +153,16 @@
       background: #ff4444;
       color: white;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 12px;
+      width: 15px;
+      height: 15px;
+      font-size: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .language-switcher {
       display: flex;
-      gap: 5px;
+      gap: 2px;
       align-items: center;
     }
     .flag-btn {
@@ -178,8 +178,8 @@
       opacity: 1;
     }
     .flag-btn img {
-      width: 30px;
-      height: 20px;
+      width: 20px;
+      height: 15px;
       border-radius: 3px;
     }
 
