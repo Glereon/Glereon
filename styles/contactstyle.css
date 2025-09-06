@@ -22,3 +22,31 @@
   color: #fff;
   line-height: 2;
 }
+@media (max-width: 600px) {
+
+.contact-info {
+  margin-right: 2rem;
+  margin-top: 100px;
+  margin-left: 8rem;
+  font-size: 1.2em;
+  color: #fff;
+  line-height: 2;
+}
+
+.contact-info1 {
+  margin-right: 2rem;
+  margin-left: 8rem;
+  font-size: 1.2em;
+  color: #fff;
+  line-height: 2;
+
+}
+.contact-info2 {
+  margin-right: 2rem;
+  margin-left: 8rem;
+  margin-bottom: 300px;
+  font-size: 1.2em;
+  color: #fff;
+  line-height: 2;
+}
+}
