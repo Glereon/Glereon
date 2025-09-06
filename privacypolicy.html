@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Glereon Labs</title>
+        <link rel="stylesheet" href="styles/footerstyles.css">
+        <link rel="stylesheet" href="styles/modalstyles.css">
+        <link rel="stylesheet"  href="styles/headerstyle.css">
+          
+    </head>
+    <body>
+      <!-- Header Section -->
+      <header class="header">
+        <img src="logos/GLEREON.png" alt="Glereon Labs Logo" class="logo">
+
+        <nav class="nav-menu">
+            <a href="index.html" data-translate="nav-home">Home</a>
+            <a href="products.html" data-translate="nav-products">Products</a>
+            <a href="about.html" data-translate="nav-about">About Us</a>
+            <a href="contact.html" data-translate="nav-contact">Contact</a>
+        </nav>
+
+        
+
+        <div  style="display: flex; gap: 20px; align-items: center;">
+          <div class="cart-icon" onclick ="toggleCart()" >
+            <span  style="font-size: 1.2em;">🛒</span>
+            <span class="cart-count" id="cartCount">0</span>
+      </div>
+      
+        <div class="language-switcher">
+            <button class="flag-btn active" >
+              <a href="index.html">   <!--rekes pakeist-->
+            <img src="logos/flag-en.jpg" alt="EN">
+          </a>
+            </button>
+            <button class="flag-btn" >
+              <a href="index.html">
+            <img src="logos/flag-lt.jpg" alt="LT">
+          </a>
+            </button>
+        </div>
+  </header>
+
+
+  <!-- Privacy Policy Section -->
+  <div class="container">
+    <h1 >Privacy Policy</h1>
+        <p>Effective date: January 1, 2022</p>
+    <p>Glereon Labs ("us", "we", or "our") operates the https://www.glereon1.com/ website (the "Service").</p>
+    <p>This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data. We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of information in accordance with this policy. Unless otherwise defined in this Privacy Policy, terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, accessible from https://www.glereon1.com/</p>
+    <h2>Information Collection And Use</h2>
+    <p>We collect several different types of information for various purposes to provide and improve our Service to you.</p>
+    <h3>Types of Data Collected</h3>
+    <h4>Personal Data</h4>
+    <p>While using our Service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you ("Personal Data"). Personally identifiable information may include, but is not limited to:</p>
+    <ul>
+      <li>Email address</li>
+      <li>First name and last name</li>
+      <li>Phone number</li>
+      <li>Address, State, Province, ZIP/Postal code, City</li>
+      <li>Cookies and Usage Data</li>
+    </ul>
+    <h4>Usage Data</h4>
+    <p>We may also collect information on how the Service is accessed and used ("Usage Data"). This Usage Data may include information such as your computer's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>
+    <h4>Tracking & Cookies Data</h4>
+    <p>We use cookies and similar tracking technologies to track the activity on our Service and hold certain information.</p>
+    <p>Cookies are files with small amount of data that is commonly used an anonymous unique identifier. Cookies are sent to your browser from the website that you visit and are stored on your device. Tracking technologies also used are beacons, tags, and scripts to collect and track information and to improve and analyze our Service.</p>
+    <p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our Service.</p>
+    <p>Examples of Cookies we use:</p>
+    <ul>
+      <li><strong>Session Cookies.</strong> We use Session Cookies to operate our Service.</li>
+      <li><strong>Preference Cookies.</strong> We use Preference Cookies to remember your preferences and various settings.</li>
+      <li><strong>Security Cookies.</strong> We use Security Cookies for security purposes.</li>
+    </ul>
+    <h2>Use of Data</h2>
+    <p>Glereon Labs uses the collected data for various purposes:</p>
+    <ul>
+      <li>To provide and maintain the Service</li>
+      <li>To notify you about changes to our Service</li>
+      <li>To allow you to participate in interactive features of our Service when you choose to do so</li>
+      <li>To provide customer care and support</li>
+      <li>To provide analysis or valuable information so that we can improve the Service</li>
+      <li>To monitor the usage of the Service</li>
+      <li>To detect, prevent and address technical issues</li>
+    </ul>
+    <h2>Transfer Of Data</h2>
+    <p>If you are located outside United States and choose to provide information to us, please note that we transfer the data, including Personal Data, to United States and process it there.</p>
+    <p>Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.</p>
+      
+  
+        <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <div class="cart-header">
+        <h2 data-translate="cart_title">Shopping Cart</h2>
+        <button class="close-btn" onclick="toggleCart()">&times;</button>
+      </div>
+      
+      <div class="cart-items" id="cartItems">
+        <!-- Cart items will be populated here -->
+      </div>
+      
+      <div class="cart-total">
+        <span data-translate="total">Total:</span><span id="cartTotal">0.00</span>€
+      </div>
+      
+      <div class="cart-actions">
+        <button class="cart-btn clear-btn" onclick="clearCart()" >Clear Cart</button>
+        <button class="cart-btn checkout-btn" onclick="checkout()" >Checkout</button>
+      </div>
+    </div>
+  </div>
+
+    
+
+
+   <footer class="footer">
+        <div class="footer-content">
+          <div class="terms">
+          <a class="termshyper" href="termsofservice.html">
+            Terms of Service
+          </a>
+          </div>
+          <div class="policy">
+          <a class="policyhyper" href="privacypolicy.html">
+            Privacy Policy
+          </a>
+        </div>
+          <img class="bank-logo3" src="logos/master.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/visa.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/paysera.png" alt="Bank Logo">
+          <img class="bank-logo1" src="logos/paypal.png" alt="Bank Logo">
+          <img class="bank-logo1" src="logos/swed.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/seb.png" alt="Bank Logo">
+        
+            
+        </div>
+
+
+   </footer>
+
+  <script src="scripts/cartsystem.js"></script>
+
+    </body>
+</html>

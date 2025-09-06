@@ -1,0 +1,61 @@
+.footer {
+    display: flex;
+    border-color: aqua;
+    align-items: top;
+    height: 100px;
+    margin-top: 100px;
+}
+.footer-content {
+    display: flex;
+    border-color: aqua;
+}
+.terms {
+    display: block;
+    width: 250px;
+    height: 50px;
+    margin-left: 100px;
+}
+.policy {
+    display: flex;
+    width: 150px;
+    height: 50px;
+    border-color: brown;
+    text-decoration-color: white;
+    
+    
+}
+.bank-logo {
+    width: 50px;
+    height: 25px;
+    object-fit: cover;
+    border-color: red;
+    margin: 5px;
+
+    
+    
+}
+.bank-logo1 {
+    width: 100px;
+    height: 25px;
+    object-fit: cover;
+    border-color: red;
+    margin: 5px;
+}
+.bank-logo3 {
+    width: 50px;
+    height: 25px;
+    object-fit: cover;
+    border-color: red;
+    margin: 5px;
+    margin-left: 300px;
+}
+.termshyper {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+.policyhyper {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5em;
+}
