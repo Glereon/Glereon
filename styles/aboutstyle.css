@@ -80,6 +80,90 @@
     margin-right: 400px;
     margin-bottom: 100px;
 }
+@media (max-width: 1000px) {
+        .aboutus1 {
+    font-size: 15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.aboutus2 {
+    font-size:15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.aboutus3 {
+    font-size: 15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.aboutus4 {
+    font-size: 15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.tick1{
+    font-size: 15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.tick2{
+    font-size: 15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.tick3{
+    font-size: 15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.tick4{
+    font-size: 15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.aboutus6 {
+    font-size: 15px;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 60px;
+    margin-right: 60px;
+    margin-bottom: 100px;
+}
+}
 @media (max-width: 600px) {
     .aboutus1 {
     font-size: 15px;
