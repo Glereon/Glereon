@@ -47,7 +47,7 @@
     object-fit: cover;
     border-color: red;
     margin: 5px;
-    margin-left: 300px;
+    margin-left: 10%;
 }
 .termshyper {
     color: white;
@@ -59,6 +59,11 @@
     text-decoration: none;
     font-size: 1.5em;
 }
+.bank-logos-box {
+    width: 100%;
+    
+}
+
 @media (max-width: 600px) {
     .footer {
     display: flex;

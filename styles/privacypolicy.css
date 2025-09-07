@@ -1,0 +1,29 @@
+.privacy-container {
+    width: 100%;
+    padding: 5rem;
+}
+h1 {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+h2 {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+h3 {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+h4 {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+@media (max-width: 600px) {
+    .privacy-container {
+        padding: 2rem;
+    }
+}
