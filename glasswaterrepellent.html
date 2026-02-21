@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta name="google" content="notranslate">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>About Us</title>
-  <link rel="stylesheet" href="styles/footerstyles.css">
-    <link rel="stylesheet"  href="styles/headerstyle.css">
-    <link rel="stylesheet" href="styles/modalstyles.css">
-    <link rel="stylesheet" href="styles/aboutstyle.css">
+    <head>
+        <meta name="google" content="notranslate">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Glereon Labs</title>
+        <link rel="stylesheet" href="styles/footerstyles.css">
+        <link rel="stylesheet" href="styles/modalstyles.css">
+        <link rel="stylesheet"  href="styles/headerstyle.css">
+        <link rel="stylesheet" href="styles/productcardstyle.css">
+        
+        
     </head>
-    
-<body>
-    <header class="header">
+    <body>
+      <!-- Header Section -->
+      <header class="header">
         <img src="logos/GLEREON.png" alt="Glereon Labs Logo" class="logo">
 
         <nav class="nav-menu">
@@ -24,72 +26,44 @@
 
         
 
-        <div style="display: flex; gap: 20px; align-items: center;">
-      <div class="cart-icon" onclick ="toggleCart()" >
-        <span  class="cart-icon2">🛒</span>
-        <span class="cart-count" id="cartCount">0</span>
+        <div  style="display: flex; gap: 20px; align-items: center;">
+          <div class="cart-icon" onclick ="toggleCart()" >
+            <span  class="cart-icon2">🛒</span>
+            <span class="cart-count" id="cartCount">0</span>
       </div>
       
         <div class="language-switcher">
             <button class="flag-btn active" >
-              <a href="about.html">   <!--rekes pakeist-->
+              <a href="glasswaterrepellent.html">   <!--rekes pakeist-->
             <img src="logos/flag-en.jpg" alt="EN">
           </a>
             </button>
             <button class="flag-btn" >
-              <a href="aboutLT.html">
+              <a href="glasswaterrepellentLT.html">
             <img src="logos/flag-lt.jpg" alt="LT">
           </a>
             </button>
         </div>
   </header>
-<p class="aboutus1">
-    At GLEREON Detailing Labs, we believe that every car 
-    deserves to look its absolute best.
-Founded with passion for automotive care and 
-innovation, our mission is simple: to provide 
-high-quality, effective, and reliable car care 
-products that make detailing easier and more enjoyable
- for everyone.
- </p>
-<p class="aboutus2">
-From powerful shampoos that lift away dirt, 
-to quick detailers that add instant gloss, and 
-protective sealants that shield your car’s 
-surface – each GLEREON product is carefully 
-formulated to deliver professional-grade results, 
-whether you’re a car enthusiast or a professional 
-detailer.
-</p>
-<p class="aboutus3">
-We combine advanced chemistry, safe ingredients, 
-and elegant design to create a full range of care 
-solutions for every surface – paint, glass, 
-wheels, tyres, trim, and interiors.
-</p>
-<p class="aboutus4">
-Our promise is simple:
-</p>
-<p class="tick1">
-✔️ Performance you can trust
-</p>
-<p class="tick2">
-✔️ Easy-to-use formulations
-</p>
-<p class="tick3">
-✔️ Long-lasting protection & shine
-</p>
-<p class="tick4">
-✔️ Made with care in Lithuania
-</p>
-<p class="aboutus6">
 
-With GLEREON Detailing Labs, car care becomes more than 
-just maintenance – it becomes a ritual of
- elegance and pride.
-</p>
+    <div class="prodcontainer">
+    <div class="img-container">
+      <img src="logos/spraybottle.jpg" alt="Glass Water Repellent" class="product-image-main">
+    </div>
+    <div class="product" data-product-id="17">   <!--nukopijuot ir pakeist data-***-id-->
+  <h2 class="product-title">Glass Water Repellent</h2>
+  <p  class="product-price">10.81€</p>
+  <p class="stock-status">In Stock</p>
+  <button class="add-to-cart-btn" >Add to Cart</button>
+</div>
+  <p class="product-description">GLEREON Glass Water Repellent provides long-lasting hydrophobic 
+    protection for all automotive glass surfaces. It repels rain, sleet, and road spray, improving 
+    visibility and reducing the need for wipers. Safe on tinted windows and coatings when applied as directed.</p>
+  </div>
 
-    <div class="cart-modal" id="cartModal">
+
+          <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
     <div class="cart-content">
       <div class="cart-header">
         <h2 data-translate="cart_title">Shopping Cart</h2>
@@ -101,7 +75,7 @@ just maintenance – it becomes a ritual of
       </div>
       
       <div class="cart-total">
-        <span data-translate="total">Total:</span> €<span id="cartTotal">0.00</span>
+        <span data-translate="total">Total:</span><span id="cartTotal">0.00</span>€
       </div>
       
       <div class="cart-actions">
@@ -110,7 +84,8 @@ just maintenance – it becomes a ritual of
       </div>
     </div>
   </div>
-<footer class="footer">
+
+  <footer class="footer">
         <div class="footer-content">
           <div class="terms">
           <a class="termshyper" href="termsofservice.html">
@@ -134,8 +109,7 @@ just maintenance – it becomes a ritual of
         </div>
 
 
-
   <script src="scripts/cartsystem.js"></script>
-</body>
+
+    </body>
 </html>
-<!-- ============================== -->
