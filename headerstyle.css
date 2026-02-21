@@ -182,7 +182,7 @@
       cursor: pointer;
       padding: 2px;
       opacity: 1;
-      transition: opacity 0.3s;
+      transition: color 0.3s;
     }
     .flag-btn:hover,
     .flag-btn.active {
