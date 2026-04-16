@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="google" content="notranslate">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Glereon Labs</title>
+        <link rel="stylesheet" href="styles/privacypolicy.css">
+        <link rel="stylesheet" href="styles/footerstyles.css">
+        <link rel="stylesheet" href="styles/modalstyles.css">
+        <link rel="stylesheet"  href="styles/headerstyle.css">
+          
+    </head>
+    <body>
+      <!-- Header Section -->
+      <header class="header">
+        <img src="logos/GLEREON.png" alt="Glereon Labs Logo" class="logo">
+
+        <nav class="nav-menu">
+            <a href="indexLT.html" data-translate="nav-home">Pradžia</a>
+            <a href="productsLT.html" data-translate="nav-products">Produktai</a>
+            <a href="aboutLT.html" data-translate="nav-about">Apie mus</a>
+            <a href="contactLT.html" data-translate="nav-contact">Kontaktai</a>
+        </nav>
+
+        
+
+        <div  style="display: flex; gap: 20px; align-items: center;">
+          <div class="cart-icon" onclick ="toggleCart()" >
+            <span  class="cart-icon2">🛒</span>
+            <span class="cart-count" id="cartCount">0</span>
+      </div>
+      
+        <div class="language-switcher">
+            <button class="flag-btn active" >
+              <a href="privacypolicy.html">   <!--rekes pakeist-->
+            <img src="logos/flag-en.jpg" alt="EN">
+          </a>
+            </button>
+            <button class="flag-btn" >
+              <a href="privacypolicyLT.html">
+            <img src="logos/flag-lt.jpg" alt="LT">
+          </a>
+            </button>
+        </div>
+  </header>
+
+
+  <!-- Privacy Policy Section -->
+  <div class="privacy-container">
+    <h1 >Privatumo Politika</h1>
+        <p>Įsigaliojimo data: 2025 m. rugsėjo 7 d.</p>
+    <p>„Glereon Labs“ („mes“, „mus“ arba „mūsų“) valdo svetainę https://www.glereon.com/ („Paslauga“).</p>
+    <p>Šiame puslapyje pateikiama mūsų politika, susijusi su asmens duomenų rinkimu, naudojimu 
+        ir atskleidimu, kai naudojatės mūsų Paslauga, ir pasirinkimais, kuriuos siejate su šiais 
+        duomenimis. Mes naudojame jūsų duomenis, kad teiktume ir tobulintume Paslaugą. Naudodamiesi 
+        Paslauga, jūs sutinkate su informacijos rinkimu ir naudojimu pagal šią politiką. Jei šioje 
+        Privatumo politikoje nenurodyta kitaip, šioje Privatumo politikoje vartojamos sąvokos turi 
+        tą pačią reikšmę kaip ir mūsų Paslaugų Tiekimo Sąlygose, kurias galima 
+        rasti adresu https://www.glereon.com/termsofservice</p>
+    <h2>Informacijos rinkimas ir naudojimas:</h2>
+    <p>Mes renkame įvairių tipų informaciją įvairiais tikslais, kad galėtume teikti ir tobulinti savo paslaugas.</p>
+    <h3>Rinktų duomenų tipai:</h3>
+    <h4>Asmeniniai duomenys</h4>
+    <p>Naudodamiesi mūsų paslauga, galime paprašyti jūsų pateikti tam tikrą asmeninę 
+        informaciją, kuri gali būti naudojama susisiekti su jumis arba jus 
+        identifikuoti („Asmens duomenys“). Asmeninę informaciją gali sudaryti, bet neapsiriboja:</p>
+<ul>
+<li>El. pašto adresas</li>
+<li>Vardas ir pavardė</li>
+<li>Telefono numeris</li>
+<li>Adresas, valstija, provincija, pašto kodas, miestas</li>
+<li>Slapukai ir naudojimo duomenys</li>
+</ul>
+<h4>Naudojimo duomenys</h4>
+<p>Taip pat galime rinkti informaciją apie tai, kaip prie paslaugos prisijungiama ir ji 
+    naudojama („Naudojimo duomenys“).
+Šie naudojimo duomenys gali apimti tokią informaciją kaip jūsų kompiuterio interneto protokolo adresas
+(pvz., IP adresas), naršyklės tipas, naršyklės versija, mūsų Paslaugos puslapiai, kuriuose lankotės,
+apsilankymo laikas ir data, tuose puslapiuose praleistas laikas, unikalūs įrenginio identifikatoriai
+ir kiti diagnostiniai duomenys.</p>
+
+<h2>Duomenų naudojimas</h2>
+<p>„Glereon Labs“ naudoja surinktus duomenis įvairiais tikslais:</p>
+<ul>
+<li>Paslaugos teikimui ir priežiūrai</li>
+<li>Pranešimui apie mūsų Paslaugos pakeitimus</li>
+<li>Galimybei dalyvauti interaktyviose mūsų Paslaugos funkcijose, kai to pageidaujate</li>
+<li>Klientų aptarnavimui ir palaikymui</li>
+<li>Analizei ar vertingai informacijai pateikti, kad galėtume tobulinti Paslaugą</li>
+<li>Paslaugos naudojimo stebėjimui</li>
+<li>Techninių problemų nustatymui, prevencijai ir sprendimui</li>
+</ul>
+<h2>Duomenų perdavimui</h2>
+<p>Jei esate už Lietuvos ribų ir nusprendžiate pateikti informaciją,
+atkreipkite dėmesį, kad mes perduodame duomenis, įskaitant asmens duomenis, į Lietuvą ir tvarkome juos ten.</p>
+<p>Jūsų sutikimas su šia privatumo politika ir po to tokios informacijos pateikimas reiškia, kad sutinkate su 
+    tokiu perdavimu.</p>
+</div>   
+  
+        <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <div class="cart-header">
+        <h2 data-translate="cart_title">Krepšelis</h2>
+        <button class="close-btn" onclick="toggleCart()">&times;</button>
+      </div>
+      
+      <div class="cart-items" id="cartItems">
+        <!-- Cart items will be populated here -->
+      </div>
+      
+      <div class="cart-total">
+        <span data-translate="total">Viso:</span><span id="cartTotal">0.00</span>€
+      </div>
+      
+      <div class="cart-actions">
+        <button class="cart-btn clear-btn" onclick="clearCart()" >Išvalyti</button>
+        <button class="cart-btn checkout-btn" onclick="checkout()" >Apmokėti</button>
+      </div>
+    </div>
+  </div>
+
+    
+
+
+   <footer class="footer">
+        <div class="footer-content">
+          <div class="terms">
+          <a class="termshyper" href="termsofserviceLT.html">
+            Paslaugų Tiekimo Sąlygos
+          </a>
+          </div>
+          <div class="policy">
+          <a class="policyhyper" href="privacypolicyLT.html">
+            Privatumo Politika
+          </a>
+        </div>
+        <div class="bank-logos-box">
+          <img class="bank-logo3" src="logos/master.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/visa.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/paysera.png" alt="Bank Logo">
+          <img class="bank-logo1" src="logos/paypal.png" alt="Bank Logo">
+          <img class="bank-logo1" src="logos/swed.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/seb.png" alt="Bank Logo">
+        
+            
+        </div>
+
+
+   </footer>
+
+  <script src="scripts/cartsystem.js"></script>
+
+    </body>
+</html>

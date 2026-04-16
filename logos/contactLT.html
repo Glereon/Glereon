@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="google" content="notranslate">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Glereon Labs</title>
+        <link rel="stylesheet" href="styles/footerstyles.css">
+        <link rel="stylesheet" href="styles/modalstyles.css">
+        <link rel="stylesheet"  href="styles/headerstyle.css">
+        <link rel="stylesheet" href="styles/contactstyle.css">
+    </head>
+    <body>
+      <!-- Header Section -->
+      <header class="header">
+        <img src="logos/GLEREON.png" alt="Glereon Labs Logo" class="logo">
+
+        <nav class="nav-menu">
+            <a href="indexLT.html" data-translate="nav-home">Pradžia</a>
+            <a href="productsLT.html" data-translate="nav-products">Produktai</a>
+            <a href="aboutLT.html" data-translate="nav-about">Apie mus</a>
+            <a href="contactLT.html" data-translate="nav-contact">Kontaktai</a>
+        </nav>
+
+        
+
+        <div  style="display: flex; gap: 20px; align-items: center;">
+          <div class="cart-icon" onclick ="toggleCart()" >
+            <span  class="cart-icon2">🛒</span>
+            <span class="cart-count" id="cartCount">0</span>
+      </div>
+      
+       <div class="language-switcher">
+            <button class="flag-btn active" >
+              <a href="contact.html">   <!--rekes pakeist-->
+            <img src="logos/flag-en.jpg" alt="EN">
+          </a>
+            </button>
+            <button class="flag-btn" >
+              <a href="contactLT.html">
+            <img src="logos/flag-lt.jpg" alt="LT">
+          </a>
+            </button>
+        </div>
+  </header>
+
+    <p class="contact-info" id="contact-title">
+Susisiekite su mumis – GLEREON Detailing Labs
+</p>
+<p class="contact-info1" id="contact-intro">
+Labai norėtume išgirsti jūsų nuomonę!
+</p>
+<p class="contact-info1" id="contact-desc">
+Jei turite klausimų apie mūsų gaminius,
+reikia pagalbos, nedvejodami susisiekite.
+</p>
+<p class="contact-info1" id="contact-address">
+📍 Adresas: GLEREON Detailing Labs, Bažnyčios g. 11-2, Lentvaris, Lietuva
+</p>
+<p class="contact-info1" id="contact-phone">
+📞 Telefonas: +370 648 30 737
+</p>
+<p class="contact-info1" id="contact-email">
+📧 El. paštas: glereon@gmail.com
+</p>
+<p class="contact-info1" id="contact-hours">
+🕒 Darbo laikas: Pirmadienis – Penktadienis: 7:00 – 16:00
+</p>
+<p class="contact-info2" id="contact-social">
+Taip pat galite susisiekti su mumis socialiniuose tinkluose ir gauti atnaujinimų, patarimų bei pasiūlymų.
+</p>
+   <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <div class="cart-header">
+        <h2 data-translate="cart_title">Krepšelis</h2>
+        <button class="close-btn" onclick="toggleCart()">&times;</button>
+      </div>
+      
+      <div class="cart-items" id="cartItems">
+        <!-- Cart items will be populated here -->
+      </div>
+      
+      <div class="cart-total">
+        <span data-translate="total">Viso:</span><span id="cartTotal">0.00</span>€
+      </div>
+      
+      <div class="cart-actions">
+        <button class="cart-btn clear-btn" onclick="clearCart()" >Išvalyti</button>
+        <button class="cart-btn checkout-btn" onclick="checkout()" >Apmokėti</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <footer class="footer">
+        <div class="footer-content">
+          <div class="terms">
+          <a class="termshyper" href="termsofserviceLT.html">
+            Paslaugų Tiekimo Sąlygos
+          </a>
+          </div>
+          <div class="policy">
+          <a class="policyhyper" href="privacypolicyLT.html">
+            Privatumo Politika
+          </a>
+        </div>
+        <div class="bank-logos-box">
+          <img class="bank-logo3" src="logos/master.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/visa.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/paysera.png" alt="Bank Logo">
+          <img class="bank-logo1" src="logos/paypal.png" alt="Bank Logo">
+          <img class="bank-logo1" src="logos/swed.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/seb.png" alt="Bank Logo">
+        
+            
+        </div>
+<script src="scripts/cartsystem.js"></script>
+
+    </body>
+</html>

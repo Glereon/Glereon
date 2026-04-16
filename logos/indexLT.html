@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="google" content="notranslate">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Glereon Labs</title>
+        <link rel="stylesheet" href="styles/footerstyles.css">
+        <link rel="stylesheet" href="styles/modalstyles.css">
+        <link rel="stylesheet"  href="styles/headerstyle.css">
+        <link rel="stylesheet" href="styles/mainproductstyle.css">
+        <link rel="stylesheet" href="styles/slidestyle.css">
+        
+        
+    </head>
+    <body>
+      <!-- Header Section -->
+      <header class="header">
+        <img src="logos/GLEREON.png" alt="Glereon Labs Logo" class="logo">
+
+        <nav class="nav-menu">
+            <a href="indexLT.html" data-translate="nav-home">Pradžia</a>
+            <a href="productsLT.html" data-translate="nav-products">Produktai</a>
+            <a href="aboutLT.html" data-translate="nav-about">Apie mus</a>
+            <a href="contactLT.html" data-translate="nav-contact">Kontaktai</a>
+        </nav>
+
+        
+
+        <div  style="display: flex; gap: 20px; align-items: center;">
+          <div class="cart-icon" onclick ="toggleCart()" >
+            <span class="cart-icon2" >🛒</span>
+            <span class="cart-count" id="cartCount">0</span>
+      </div>
+      
+        <div class="language-switcher">
+            <button class="flag-btn active" >
+              <a href="index.html">   <!--rekes pakeist-->
+            <img src="logos/flag-en.jpg" alt="EN">
+          </a>
+            </button>
+            <button class="flag-btn" >
+              <a href="indexLT.html">
+            <img src="logos/flag-lt.jpg" alt="LT">
+          </a>
+            </button>
+        </div>
+  </header>
+      
+  <!-- Main slideshow container -->
+   <div class="container">
+        <!-- Image container with all slides -->
+        <div class="slide-image">
+            <!-- Slide 1: Handwash product image 1 -->
+            <img src="logos/handwash1.jpeg" alt="Handwash Product 1" class="img active">
+            <!-- Slide 2: Handwash product image 2 -->
+            <img src="logos/wheelcareadLT.png" alt="Handwash Product 2" class="img">
+            <!-- Slide 3: Handwash product image 3 -->
+            <img src="logos/handwash3.jpeg" alt="Handwash Product 3" class="img">
+            <!-- Slide 4: Handwash product image 4 -->
+            <img src="logos/Exterior ad lt.png" alt="Handwash Product 4" class="img">
+        </div>
+   </div>
+
+      <p class="centerparagraph">Greitai perka</p>
+
+       
+
+   <!-- Products Section -->
+ 
+  <div class="prodcontainer">
+    <div class="img-container">
+      <a href="glasscleanerLT.html">
+      <img src="logos/Glass cleaner final.png" alt="Glass Cleaner" class="product-image-main">
+    </a>
+    </div>
+    <div class="product" data-product-id="6">   <!--nukopijuot ir pakeist data-***-id-->
+  <h2 class="product-title">Stiklo Valiklis</h2>
+  <p  class="product-price">8.81€</p>
+  <p class="stock-status">Yra sandelyje</p>
+  <button class="add-to-cart-btn" >Pridėti į krepšelį</button>
+</div>
+</div>
+
+  <div class="prodcontainer">
+    <div class="img-container">
+      <a href="quickdetailerLT.html">
+      <img src="logos/Quick detailer final.png" alt="Quick Detailer" class="product-image-main">
+    </a>
+    </div>
+    <div class="product" data-product-id="2">
+  <h2 class="product-title">Greitas Vaškas</h2>
+  <p class="product-price">8.48€</p>
+  <p class="stock-status">Yra sandelyje</p>
+  <button class="add-to-cart-btn" >Pridėti į krepšelį</button>
+</div>
+  </div>
+
+   <div class="prodcontainer">
+    <div class="img-container">
+      <a href="interiorcleanerLT.html">
+      <img src="logos/Interior cleaner final.png" alt="Interior Cleaner" class="product-image-main">
+    </a>
+    </div>
+    <div class="product" data-product-id="5">
+  <h2 class="product-title">Salono Valiklis</h2>
+  <p class="product-price">8.88€</p>
+  <p class="stock-status">Yra sandelyje</p>
+  <button class="add-to-cart-btn" >Pridėti į krepšelį</button>
+</div>
+  </div>
+
+  <p class="centerparagraph">Išorė</p>
+
+  <div class="prodcontainer">
+    <div class="img-container">
+      <a href="tireandtrimLT.html">
+      <img src="logos/Trim and tire final.png" alt="Tire and trim" class="product-image-main">
+    </a>
+    </div>
+    <div class="product" data-product-id="4">
+  <h2 class="product-title">Padangos Ir Apdaila</h2>
+  <p class="product-price">11.73€</p>
+  <p class="stock-status">Yra sandelyje</p>
+  <button class="add-to-cart-btn">Pridėti į krepšelį</button>
+</div>
+  </div>
+
+     <div class="prodcontainer">
+    <div class="img-container">
+      <a href="sealantLT.html">
+      <img src="logos/Sealant final.png" alt="Sealant" class="product-image-main">
+      </a>
+    </div>
+    <div class="product" data-product-id="3"><!--nukopijuot ir pakeist data-***-id-->
+  <h2 class="product-title">Sandariklis</h2>
+  <p  class="product-price">10.43€</p>
+  <p class="stock-status">Yra sandelyje</p>
+  <button class="add-to-cart-btn" >Pridėti į krepšelį</button>
+</div>
+  </div>
+
+
+    <div class="prodcontainer">
+    <div class="img-container">
+      <a href="carshampooLT.html">
+        <img src="logos/Car shampoo final.png"  alt="Car Shampoo" class="product-image-main">
+      </a>
+    </div>
+    <div class="product" data-product-id="1">
+  <h2 class="product-title">Automobilinis Šampūnas</h2>
+  <p class="product-price">8.23€</p>
+  <p class="stock-status">Yra sandelyje</p>
+  <button class="add-to-cart-btn">Pridėti į krepšelį</button>
+</div>
+  </div>
+        <!--products go here-->
+
+
+
+        <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <div class="cart-header">
+        <h2 data-translate="cart_title">Krepšelis</h2>
+        <button class="close-btn" onclick="toggleCart()">&times;</button>
+      </div>
+      
+      <div class="cart-items" id="cartItems">
+        <!-- Cart items will be populated here -->
+      </div>
+      
+      <div class="cart-total">
+        <span data-translate="total">Viso:</span><span id="cartTotal">0.00</span>€
+      </div>
+      
+      <div class="cart-actions">
+        <button class="cart-btn clear-btn" onclick="clearCart()" >Išvalyti</button>
+        <button class="cart-btn checkout-btn" onclick="checkout()" >Apmokėti</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+   <footer class="footer">
+        <div class="footer-content">
+          <div class="terms">
+          <a class="termshyper" href="termsofserviceLT.html">
+            Paslaugų Tiekimo Sąlygos
+          </a>
+          </div>
+          <div class="policy">
+          <a class="policyhyper" href="privacypolicyLT.html">
+            Privatumo Politika
+          </a>
+        </div>
+        <div class="bank-logos-box">
+          <img class="bank-logo3" src="logos/master.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/visa.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/paysera.png" alt="Bank Logo">
+          <img class="bank-logo1" src="logos/paypal.png" alt="Bank Logo">
+          <img class="bank-logo1" src="logos/swed.png" alt="Bank Logo">
+          <img class="bank-logo" src="logos/seb.png" alt="Bank Logo">
+        </div>
+   </footer>
+  <script src="scripts/slideshow.js"></script>
+
+  <script src="scripts/cartsystem.js"></script>
+
+    </body>
+</html>
