@@ -1,3 +1,15 @@
+/* first text you see when entering page */
+.welcometext {
+    font-size: 5rem;
+    font-style: sans-serif;
+    font-weight: bold;
+    margin-top: 150px;
+    text-align: center;
+}
+
+
+
+
 
 
 
@@ -14,7 +26,6 @@
 /* Main Product Style */
 
 .prodcontainer {
-    padding: 20px;
     background-color: #111420;
     border-style: none;
     width: 300px;
@@ -29,10 +40,10 @@
 }
 .img-container {
     width: 150px;
-    height: 200px;;
+    height: 270px;;
     border-style: none;
     padding: 0;
-    margin-left:55px;
+    margin-left:72px;
     margin-bottom: 20px;
     margin-top: 20px;
     
@@ -43,7 +54,7 @@
 }
 .product-image-main {
     width: 150px;
-    height: 200px;
+    height: 270px;
     margin-bottom: 20px;
     cursor: pointer;
     border-radius: 10px;
@@ -113,7 +124,7 @@
 }
 .img-container {
     width: 100px;
-    height: 150px;;
+    height: 190px;;
     border-style: none;
     padding: 0;
     margin-left:29%;
@@ -123,7 +134,7 @@
 }
 .product-image-main {
     width: 100px;
-    height: 150px;
+    height: 190px;
     margin-bottom: 20px;
     cursor: pointer;
     border-radius: 10px;
@@ -192,7 +203,7 @@
 }
 .img-container {
     width: 100px;
-    height: 150px;;
+    height: 190px;;
     border-style: none;
     padding: 0;
     margin-left:21%;
@@ -206,7 +217,7 @@
 }
 .product-image-main {
     width: 100px;
-    height: 150px;
+    height: 190px;
     margin-bottom: 20px;
     cursor: pointer;
     border-radius: 10px;

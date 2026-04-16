@@ -27,9 +27,11 @@
         // Preload images for smoother transitions
         const images = [
             'logos/handwash1.jpeg',
-            'logos/handwash2.jpg',
+            'logos/wheelcaread.png',
             'logos/handwash3.jpeg',
-            'logos/handwash4.jpg'
+            'logos/Exterior ad eng.png',
+            'logos/wheelcareadLT.png',
+            'logos/Exterior ad lt.png'
         ];
         
         // Preload each image to prevent loading delays
