@@ -26,7 +26,8 @@
         
         // Preload images for smoother transitions
         const images = [
-            'logos/handwash1.jpeg',
+            'logos/welcomeadeng.png',
+            'logos/welcomeadlt.png',
             'logos/wheelcaread.png',
             'logos/handwash3.jpeg',
             'logos/Exterior ad eng.png',
