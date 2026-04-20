@@ -28,11 +28,11 @@
         const images = [
             'logos/welcomeadeng.png',
             'logos/welcomeadlt.png',
-            'logos/wheelcaread.png',
-            'logos/handwash3.jpeg',
             'logos/Exterior ad eng.png',
-            'logos/wheelcareadLT.png',
-            'logos/Exterior ad lt.png'
+            'logos/Detailing redefined ad.png',
+            'logos/Exterior ad lt.png',
+            'logos/Glereon products side by side.png',
+            'logos/Detailing redefined ad LT.png'
         ];
         
         // Preload each image to prevent loading delays
