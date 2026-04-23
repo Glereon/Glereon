@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lt">
 <head>
     <meta name="google" content="notranslate">
     <meta charset="UTF-8">
@@ -15,6 +15,7 @@
     <link rel="stylesheet"  href="styles/headerstyle.css">
     <link rel="stylesheet" href="styles/modalstyles.css">
     <link rel="stylesheet" href="styles/aboutstyle.css">
+    <link rel="stylesheet" href="styles/cartlangicon.css">
     </head>
     
 <body>
@@ -30,8 +31,8 @@
 
         
 
-        <div style="display: flex; gap: 20px; align-items: center;">
-      <div class="cart-icon" onclick ="toggleCart()" >
+        <div class="cartlangbox">
+        <div class="cart-icon" id="cartBtn" id="cartBtn">
         <span  class="cart-icon2">🛒</span>
         <span class="cart-count" id="cartCount">0</span>
       </div>
@@ -93,11 +94,11 @@ Su „GLEREON Detailing Labs“ automobilio priežiūra tampa daugiau nei
 tik technine priežiūra – tai tampa elegancijos ir pasididžiavimo ritualu.
 </p>
 
-    <div class="cart-modal" id="cartModal">
+     <div class="cart-modal" id="cartModal">
     <div class="cart-content">
       <div class="cart-header">
         <h2 data-translate="cart_title">Krepšelis</h2>
-        <button class="close-btn" onclick="toggleCart()">&times;</button>
+        <button class="close-btn" id="closeBtn" id="closeBtn">&times;</button>
       </div>
       
       <div class="cart-items" id="cartItems">
@@ -105,12 +106,12 @@ tik technine priežiūra – tai tampa elegancijos ir pasididžiavimo ritualu.
       </div>
       
       <div class="cart-total">
-        <span data-translate="total">Viso:</span> €<span id="cartTotal">0.00</span>
+        <span data-translate="total">Total:</span> €<span id="cartTotal">0.00</span>
       </div>
       
       <div class="cart-actions">
-        <button class="cart-btn clear-btn" onclick="clearCart()" >Išvalyti</button>
-        <button class="cart-btn checkout-btn" onclick="checkout()" >Apmokėti</button>
+        <button class="cart-btn clear-btn" id="clearCrt" id="clearCrt" >išvalyti</button>
+        <button class="cart-btn checkout-btn" id="checkout-btn" id="checkout-btn" >Apmokėti</button>
       </div>
     </div>
   </div>
@@ -143,3 +144,4 @@ tik technine priežiūra – tai tampa elegancijos ir pasididžiavimo ritualu.
 </body>
 </html>
 <!-- ============================== -->
+

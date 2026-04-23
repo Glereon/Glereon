@@ -112,7 +112,7 @@
     background-color: #111420;
     border-style: none;
     width: 230px;
-    height: 350px;
+    height: auto;
     display: inline-block;
     text-align: center;
     margin: 10px;
@@ -191,7 +191,7 @@
     background-color: #111420;
     border-style: none;
     width: 170px;
-    height: 350px;
+    height: auto;
     display: inline-block;
     text-align: center;
     margin: 10px;

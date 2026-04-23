@@ -9,7 +9,7 @@
         /* Image container holding all slides */
         .slide-image {
             width: 100%;
-            aspect-ratio: 3/1;
+            height: 100%;
             position: relative;
         }
 

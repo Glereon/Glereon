@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lt">
     <head>
      <meta name="google" content="notranslate">
     <meta charset="UTF-8">
@@ -16,8 +16,8 @@
         <link rel="stylesheet"  href="styles/headerstyle.css">
         <link rel="stylesheet" href="styles/mainproductstyle.css">
         <link rel="stylesheet" href="styles/slidestyle.css">
-        <link rel="icon" type="image/png" href="/logos/favicon.png">
-        
+        <link rel="icon" type="image/png" href="/logos/favicon.png">        
+        <link rel="stylesheet" href="styles/cartlangicon.css">
     </head>
     <body>
       <!-- Header Section -->
@@ -34,7 +34,7 @@
         
 
         <div  style="display: flex; gap: 20px; align-items: center;">
-          <div class="cart-icon" onclick ="toggleCart()" >
+          <div class="cart-icon" id="cartBtn" >
             <span class="cart-icon2" >🛒</span>
             <span class="cart-count" id="cartCount">0</span>
       </div>
@@ -169,7 +169,7 @@
     <div class="cart-content">
       <div class="cart-header">
         <h2 data-translate="cart_title">Krepšelis</h2>
-        <button class="close-btn" onclick="toggleCart()">&times;</button>
+        <button class="close-btn" id="closeBtn">&times;</button>
       </div>
       
       <div class="cart-items" id="cartItems">
@@ -181,8 +181,8 @@
       </div>
       
       <div class="cart-actions">
-        <button class="cart-btn clear-btn" onclick="clearCart()" >Išvalyti</button>
-        <button class="cart-btn checkout-btn" onclick="checkout()" >Apmokėti</button>
+        <button class="cart-btn clear-btn" id="clearCrt" >Išvalyti</button>
+        <button class="cart-btn checkout-btn" id="checkout-btn" >Apmokėti</button>
       </div>
     </div>
   </div>
@@ -217,3 +217,8 @@
 
     </body>
 </html>
+
+
+
+
+
