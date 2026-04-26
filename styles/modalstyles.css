@@ -49,6 +49,35 @@
       margin-bottom: 1em;
     }
     
+    .customer-info {
+      margin: 1em 0;
+      padding: 1em;
+      background: #1a1f35;
+      border-radius: 5px;
+    }
+    
+    .customer-info h3 {
+      color: #fe7300;
+      margin-bottom: 0.5em;
+    }
+    
+    .customer-info input,
+    .customer-info textarea {
+      width: 100%;
+      padding: 0.5em;
+      margin-bottom: 0.5em;
+      border: 1px solid #22263a;
+      border-radius: 3px;
+      background: #111420;
+      color: white;
+    }
+    
+    .customer-info input:focus,
+    .customer-info textarea:focus {
+      outline: none;
+      border-color: #fe7300;
+    }
+    
     .cart-item {
       display: flex;
       justify-content: space-between;

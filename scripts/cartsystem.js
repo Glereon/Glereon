@@ -216,9 +216,83 @@ const productNameTranslations = {
     }
     
   
-    // cia kazkada reiks idet mokejimo buda
-    function checkout() {
-      alert('Checkout functionality would be implemented here!');
+    // Checkout functionality
+    async function checkout() {
+      if (cart.length === 0) {
+        alert('Your cart is empty');
+        return;
+      }
+
+      // Show customer info form
+      const customerInfo = document.getElementById('customerInfo');
+      const checkoutBtn = document.getElementById('checkout-btn');
+      
+      if (customerInfo.style.display === 'none') {
+        customerInfo.style.display = 'block';
+        checkoutBtn.textContent = 'Proceed to Payment';
+        return;
+      }
+
+      // Validate customer info
+      const name = document.getElementById('customerName').value.trim();
+      const email = document.getElementById('customerEmail').value.trim();
+      const phone = document.getElementById('customerPhone').value.trim();
+      const address = document.getElementById('customerAddress').value.trim();
+
+      if (!name || !email || !address) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      // Calculate total
+      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      
+      // Prepare order data
+      const orderData = {
+        items: cart,
+        total: total,
+        customer: {
+          name: name,
+          email: email,
+          phone: phone,
+          address: address
+        },
+        orderId: 'ORDER-' + Date.now()
+      };
+
+      // Try to send to backend
+      try {
+        const response = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.sessionId) {
+            // Clear cart after successful payment initiation
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+            // Redirect to Stripe Checkout
+            const stripe = Stripe('pk_test_51TQBk4JynRvgwp1ZpkLxId5Kkhwdcb6Zz8D0xXmV0irYSQyIWMDHoQyxXxbQ0ai9DDhwGeAz9ewYwijWbIH2A5nh00KdH4PxJR');
+            const result = await stripe.redirectToCheckout({
+              sessionId: data.sessionId
+            });
+            if (result.error) {
+              alert('Error: ' + result.error.message);
+            }
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Backend not available:', error);
+      }
+
+      // Fallback if backend not running
+      alert('Payment integration requires backend server. Please run the server.js file and ensure your Stripe credentials are configured.');
+      console.log('Order data for manual processing:', orderData);
     }
 
     // Initialize

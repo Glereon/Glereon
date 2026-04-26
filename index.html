@@ -186,6 +186,15 @@
         <span data-translate="total">Total:</span><span id="cartTotal">0.00</span>€
       </div>
       
+      <!-- Customer Information Form -->
+      <div class="customer-info" id="customerInfo" style="display: none;">
+        <h3 data-translate="customer_info">Customer Information</h3>
+        <input type="text" id="customerName" placeholder="Full Name" required>
+        <input type="email" id="customerEmail" placeholder="Email Address" required>
+        <input type="tel" id="customerPhone" placeholder="Phone Number (optional)">
+        <textarea id="customerAddress" placeholder="Shipping Address" rows="3" required></textarea>
+      </div>
+      
       <div class="cart-actions">
         <button class="cart-btn clear-btn" id="clearCrt" >Clear Cart</button>
         <button class="cart-btn checkout-btn" id="checkout-btn" >Checkout</button>
@@ -217,6 +226,7 @@
           <img class="bank-logo" src="logos/seb.png" alt="Bank Logo">
         </div>
    </footer>
+  <script src="https://js.stripe.com/v3/"></script>
   <script src="scripts/slideshow.js"></script>
 
   <script src="scripts/cartsystem.js"></script>
