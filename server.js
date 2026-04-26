@@ -18,7 +18,7 @@ app.use(express.raw({type: 'application/json'}, (req, res, next) => {
 }));
 
 // Email transporter
-const emailTransporter = nodemailer.createTransporter({
+const emailTransporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: parseInt(process.env.EMAIL_PORT),
   secure: parseInt(process.env.EMAIL_PORT) === 465,
