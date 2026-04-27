@@ -262,7 +262,7 @@ const productNameTranslations = {
 
       // Try to send to backend
       try {
-        const response = await fetch('glereon-production.up.railway.app', {
+        const response = await fetch('https://railway.com/project/b20465a0-257c-4f1f-94ed-f9e6bb9348f9/service/2c9c2fa7-5264-4180-aa48-2b10a64f21d0?environmentId=3f82aaa6-0d3f-4bcb-8c50-480867d8abf6', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
