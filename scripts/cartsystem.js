@@ -262,7 +262,7 @@ const productNameTranslations = {
 
       // Try to send to backend
       try {
-        const response = await fetch('/api/create-checkout-session', {
+        const response = await fetch('glereon-production.up.railway.app/api/create-checkout-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
