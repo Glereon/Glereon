@@ -7,7 +7,9 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://glereon.com']
+}));
 app.use(express.json());
 // Stripe webhook needs raw body
 app.use(express.raw({type: 'application/json'}, (req, res, next) => {
