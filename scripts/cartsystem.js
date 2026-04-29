@@ -232,9 +232,12 @@ const productNameTranslations = {
         orderId: 'ORDER-' + Date.now()
       };
 
+      // Dynamic API URL for prod/local
+      const apiUrl = window.location.hostname === 'glereon.com' ? 'https://glereon.com/api/create-checkout-session' : '/api/create-checkout-session';
+      
       // Try to send to backend
       try {
-        const response = await fetch('/api/create-checkout-session', {
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
