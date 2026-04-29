@@ -94,7 +94,7 @@ const productNameTranslations = {
   const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
   addToCartButtons.forEach(button => {
     button.addEventListener('click', function() {
-      const productElement = this.parentElement; // Extract the product ID from the parent element's ID
+      const productElement = this.parentElement;
       addToCart(productElement);
     });
   });
@@ -232,8 +232,8 @@ const productNameTranslations = {
         orderId: 'ORDER-' + Date.now()
       };
 
-      // Dynamic API URL for prod/local
-      const apiUrl = window.location.hostname === 'glereon.com' ? 'https://glereon.com/api/create-checkout-session' : '/api/create-checkout-session';
+      // Dynamic API URL for Railway backend
+      const apiUrl = window.location.hostname.includes('localhost') ? '/api/create-checkout-session' : 'https://glereon-production.up.railway.app/api/create-checkout-session';
       
       // Try to send to backend
       try {
@@ -256,13 +256,15 @@ const productNameTranslations = {
             }
             return;
           }
+        } else {
+          console.error('Backend response:', response.status, response.statusText);
         }
       } catch (error) {
         console.error('Backend not available:', error);
       }
 
       // Fallback if backend not running
-      alert('Payment integration requires backend server. Please run the server.js file and ensure your Stripe credentials are configured.');
+      alert('Payment integration requires backend server. Check console for details.');
       console.log('Order data for manual processing:', orderData);
     }
 
@@ -301,5 +303,4 @@ const productNameTranslations = {
         }
       });
     });
-
 
