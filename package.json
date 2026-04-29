@@ -1,7 +1,7 @@
 {
   "name": "glereon-backend",
   "version": "1.0.0",
-  "description": "Backend for Glereon e-commerce site with Paysera integration",
+  "description": "Backend for Glereon e-commerce site with Stripe integration",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

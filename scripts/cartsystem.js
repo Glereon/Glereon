@@ -1,6 +1,3 @@
-    const phrases = {
-        empty_cart: "Your cart is empty"};
-
 const productNameTranslations = {
   en: {
     "1": "Car Shampoo",
@@ -150,32 +147,7 @@ const productNameTranslations = {
           </div>
         `).join('');
         
-        // Add event listeners for dynamically created buttons
-        const quantityBtns = cartItems.querySelectorAll('.quantity-btn');
-        quantityBtns.forEach(btn => {
-          btn.addEventListener('click', function() {
-            const index = parseInt(this.dataset.index);
-            const change = this.classList.contains('minus') ? -1 : 1;
-            updateQuantity(index, change);
-          });
-        });
-        
-        const removeBtns = cartItems.querySelectorAll('.remove-btn');
-        removeBtns.forEach(btn => {
-          btn.addEventListener('click', function() {
-            const index = parseInt(this.dataset.index);
-            removeItem(index);
-          });
-        });
       }
-      document.getElementById("cartBtn").addEventListener("click", toggleCart);
-      document.getElementById("closeBtn").addEventListener("click", toggleCart);
-      document.getElementById("clearCrt").addEventListener("click", clearCart);
-      document.getElementById("checkout-btn").addEventListener("click", checkout);
-      
-      
-
-
 
       // Update total
       const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
@@ -262,7 +234,7 @@ const productNameTranslations = {
 
       // Try to send to backend
       try {
-        const response = await fetch('glereon-production.up.railway.app/api/create-checkout-session', {
+        const response = await fetch('https://glereon-production.up.railway.app/api/create-checkout-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
@@ -271,10 +243,6 @@ const productNameTranslations = {
         if (response.ok) {
           const data = await response.json();
           if (data.sessionId) {
-            // Clear cart after successful payment initiation
-            cart = [];
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartDisplay();
             // Redirect to Stripe Checkout
             const stripe = Stripe('pk_test_51TQBk4JynRvgwp1ZpkLxId5Kkhwdcb6Zz8D0xXmV0irYSQyIWMDHoQyxXxbQ0ai9DDhwGeAz9ewYwijWbIH2A5nh00KdH4PxJR');
             const result = await stripe.redirectToCheckout({
@@ -298,6 +266,30 @@ const productNameTranslations = {
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
       updateCartDisplay();
+      
+      // Static cart controls (attach once)
+      document.getElementById("cartBtn").addEventListener("click", toggleCart);
+      document.getElementById("closeBtn").addEventListener("click", toggleCart);
+      document.getElementById("clearCrt").addEventListener("click", clearCart);
+      document.getElementById("checkout-btn").addEventListener("click", checkout);
+      
+      // Event delegation for quantity and remove buttons
+      const cartItemsContainer = document.getElementById('cartItems');
+      if (cartItemsContainer) {
+        cartItemsContainer.addEventListener('click', function(event) {
+          const btn = event.target.closest('button');
+          if (!btn) return;
+          
+          if (btn.classList.contains('quantity-btn')) {
+            const index = parseInt(btn.dataset.index);
+            const change = btn.classList.contains('minus') ? -1 : 1;
+            updateQuantity(index, change);
+          } else if (btn.classList.contains('remove-btn')) {
+            const index = parseInt(btn.dataset.index);
+            removeItem(index);
+          }
+        });
+      }
       
       // Close modal when clicking outside
       document.getElementById('cartModal').addEventListener('click', function(event) {

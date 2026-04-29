@@ -6,6 +6,8 @@
         
         // Function to show next slide
         function showSlide() {
+            if (slides.length === 0) return;
+            
             // Hide all slides by removing active class
             slides.forEach(slide => slide.classList.remove('active'));
             
@@ -22,7 +24,9 @@
         }
         
         // Change slide every 4 seconds (4000 milliseconds)
-        setInterval(showSlide, 4000);
+        if (slides.length > 0) {
+            setInterval(showSlide, 4000);
+        }
         
         // Preload images for smoother transitions
         const images = [
@@ -30,7 +34,6 @@
             'logos/welcomeadlt.png',
             'logos/Exterior ad eng.png',
             'logos/Detailing redefined ad.png',
-            'logos/Exterior ad lt.png',
             'logos/Glereon products side by side.png',
             'logos/Detailing redefined ad LT.png'
         ];

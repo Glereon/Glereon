@@ -8,16 +8,48 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['https://glereon.com']
+  origin: process.env.NODE_ENV === 'production' ? ['https://glereon.com'] : true
 }));
-app.use(express.json());
-// Stripe webhook needs raw body
-app.use(express.raw({type: 'application/json'}, (req, res, next) => {
-  if (req.path === '/api/stripe-webhook') {
-    return next();
+
+// Stripe webhook handler needs RAW body before express.json()
+app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (error) {
+    console.error('Webhook signature verification failed:', error.message);
+    return res.status(400).send(`Webhook Error: ${error.message}`);
   }
-  next();
-}));
+
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed':
+        await handleCheckoutSessionCompleted(event.data.object);
+        break;
+
+      case 'charge.refunded':
+        await handleChargeRefunded(event.data.object);
+        break;
+
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
+    }
+
+    res.json({ received: true });
+  } catch (error) {
+    console.error('Webhook processing error:', error);
+    res.status(500).json({ error: 'Webhook processing failed' });
+  }
+});
+
+// Parse JSON for all other routes
+app.use(express.json());
 
 // Email transporter
 const emailTransporter = nodemailer.createTransport({
@@ -102,43 +134,6 @@ app.post('/api/create-checkout-session', async (req, res) => {
   }
 });
 
-// Stripe webhook handler
-app.post('/api/stripe-webhook', express.raw({type: 'application/json'}), async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-
-  let event;
-  try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
-  } catch (error) {
-    console.error('Webhook signature verification failed:', error.message);
-    return res.status(400).send(`Webhook Error: ${error.message}`);
-  }
-
-  try {
-    switch (event.type) {
-      case 'checkout.session.completed':
-        await handleCheckoutSessionCompleted(event.data.object);
-        break;
-
-      case 'charge.refunded':
-        await handleChargeRefunded(event.data.object);
-        break;
-
-      default:
-        console.log(`Unhandled event type: ${event.type}`);
-    }
-
-    res.json({ received: true });
-  } catch (error) {
-    console.error('Webhook processing error:', error);
-    res.status(500).json({ error: 'Webhook processing failed' });
-  }
-});
-
 // Handle successful payment
 async function handleCheckoutSessionCompleted(session) {
   console.log('✓ Payment completed for session:', session.id);
@@ -147,18 +142,19 @@ async function handleCheckoutSessionCompleted(session) {
   const customerEmail = session.customer_email;
   const customerName = session.metadata.customerName;
 
+  // Get full session details
+  const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
+    expand: ['payment_intent'],
+  });
+
   // Update order status
   if (orders.has(orderId)) {
     const order = orders.get(orderId);
     order.status = 'paid';
     order.stripeSessionId = session.id;
+    order.paymentIntentId = fullSession.payment_intent?.id || null;
     order.paidAt = new Date();
   }
-
-  // Get full session details
-  const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
-    expand: ['payment_intent'],
-  });
 
   // Send customer confirmation email
   const customerEmailHtml = `
@@ -237,6 +233,15 @@ async function handleChargeRefunded(charge) {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running with Stripe integration' });
+});
+
+// Block sensitive files
+const blockedPaths = ['/server.js', '/package.json', '/package-lock.json', '/.env'];
+app.use((req, res, next) => {
+  if (blockedPaths.includes(req.path)) {
+    return res.status(403).send('Forbidden');
+  }
+  next();
 });
 
 // Serve static files
