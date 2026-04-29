@@ -86,7 +86,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
         currency: 'eur',
         product_data: {
           name: item.name,
-          description: item.description || '',
+          description: item.description || `${item.name} - Glereon Detailing Labs`,
         },
         unit_amount: Math.round(item.price * 100), // Convert to cents
       },
@@ -98,8 +98,9 @@ app.post('/api/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${BASE_URL}/checkout-success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${BASE_URL}/checkout-cancel.html`,
+      success_url: `${BASE_URL ? BASE_URL + '/checkout-success.html' : 'https://glereon.com/checkout-success.html'}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${BASE_URL ? BASE_URL + '/checkout-cancel.html' : 'https://glereon.com/checkout-cancel.html'}`,
+
       customer_email: customer.email,
       metadata: {
         orderId: orderId,
