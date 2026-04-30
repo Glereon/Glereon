@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer').default || require('nodemailer');
+const { Resend } = require('resend');
 require('dotenv').config();
 console.log('NODE_ENV:', process.env.NODE_ENV);
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -171,10 +172,16 @@ async function handleCheckoutSessionCompleted(session) {
   console.log('Customer email:', session.customer_email);
   console.log('Customer name:', session.metadata.customerName);
 
-  // Validate required environment variables first (fast check)
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.MERCHANT_EMAIL) {
-    console.error('ERROR: Missing required email configuration. Emails cannot be sent.');
+// Validate required environment variables first (fast check)
+  if (!process.env.RESEND_API_KEY) {
+    console.error('ERROR: Missing RESEND_API_KEY. Emails cannot be sent.');
     return; // Still return - Stripe already received the event
+  }
+  
+  const merchantEmail = process.env.MERCHANT_EMAIL;
+  if (!merchantEmail) {
+    console.error('ERROR: Missing MERCHANT_EMAIL. Emails cannot be sent.');
+    return;
   }
 
   const orderId = session.metadata.orderId;
@@ -222,40 +229,30 @@ async function handleCheckoutSessionCompleted(session) {
     <p><strong>Stripe Session ID:</strong> ${session.id}</p>
   `;
 
-  // Validate required environment variables
-  console.log('Validating email configuration...');
-  console.log('EMAIL_HOST:', process.env.EMAIL_HOST ? 'SET' : 'MISSING');
-  console.log('EMAIL_PORT:', process.env.EMAIL_PORT ? 'SET' : 'MISSING');
-  console.log('EMAIL_USER:', process.env.EMAIL_USER ? 'SET' : 'MISSING');
-  console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'SET' : 'MISSING');
-  console.log('MERCHANT_EMAIL:', process.env.MERCHANT_EMAIL ? 'SET' : 'MISSING');
-
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.MERCHANT_EMAIL) {
-    console.error('ERROR: Missing required email configuration. Emails cannot be sent.');
-    return;
-  }
-
 try {
+    // Use Resend for email sending (works on Railway)
+    console.log('RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'SET' : 'MISSING');
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    
     // Send customer email
     console.log(`Sending confirmation email to customer: ${customerEmail}`);
-    const transporter = getEmailTransporter();
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: customerEmail,
+    const customerResult = await resend.emails.send({
+      from: 'Glereon Detailing Labs <onboarding@resend.dev>',
+      to: [customerEmail],
       subject: `Order Confirmation - ${orderId}`,
       html: customerEmailHtml
     });
-    console.log('Customer email sent successfully');
+    console.log('Customer email result:', customerResult);
 
     // Send merchant email
-    console.log(`Sending notification email to merchant: ${process.env.MERCHANT_EMAIL}`);
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.MERCHANT_EMAIL,
+    console.log(`Sending notification email to merchant: ${merchantEmail}`);
+    const merchantResult = await resend.emails.send({
+      from: 'Glereon Detailing Labs <onboarding@resend.dev>',
+      to: [merchantEmail],
       subject: `New Order - ${orderId}`,
       html: merchantEmailHtml
     });
-    console.log('Merchant email sent successfully');
+    console.log('Merchant email result:', merchantResult);
 
     console.log(`✓ Confirmation emails sent for order ${orderId}`);
   } catch (emailError) {
