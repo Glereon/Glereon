@@ -22,7 +22,7 @@ app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET
+process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (error) {
     console.error('Webhook signature verification failed:', error.message);
@@ -32,8 +32,11 @@ app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async
   try {
     switch (event.type) {
       case 'checkout.session.completed':
-        await handleCheckoutSessionCompleted(event.data.object);
-        break;
+        // Respond to Stripe immediately to avoid timeout
+        res.json({ received: true });
+        // Process email in background
+        handleCheckoutSessionCompleted(event.data.object).catch(err => console.error('Background email error:', err));
+        return;
 
       case 'charge.refunded':
         await handleChargeRefunded(event.data.object);
@@ -54,7 +57,7 @@ app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async
 app.use(express.json());
 
 // Email transporter
-const emailTransporter = nodemailer.createTransport({
+const emailTransporter = nodemailer.createTransporter({
   host: process.env.EMAIL_HOST,
   port: parseInt(process.env.EMAIL_PORT),
   secure: parseInt(process.env.EMAIL_PORT) === 465,
@@ -137,9 +140,17 @@ app.post('/api/create-checkout-session', async (req, res) => {
   }
 });
 
-// Handle successful payment
+// Handle successful payment with timeout
 async function handleCheckoutSessionCompleted(session) {
   console.log('✓ Payment completed for session:', session.id);
+  console.log('Customer email:', session.customer_email);
+  console.log('Customer name:', session.metadata.customerName);
+
+  // Validate required environment variables first (fast check)
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.MERCHANT_EMAIL) {
+    console.error('ERROR: Missing required email configuration. Emails cannot be sent.');
+    return; // Still return - Stripe already received the event
+  }
 
   const orderId = session.metadata.orderId;
   const customerEmail = session.customer_email;
@@ -186,26 +197,44 @@ async function handleCheckoutSessionCompleted(session) {
     <p><strong>Stripe Session ID:</strong> ${session.id}</p>
   `;
 
+  // Validate required environment variables
+  console.log('Validating email configuration...');
+  console.log('EMAIL_HOST:', process.env.EMAIL_HOST ? 'SET' : 'MISSING');
+  console.log('EMAIL_PORT:', process.env.EMAIL_PORT ? 'SET' : 'MISSING');
+  console.log('EMAIL_USER:', process.env.EMAIL_USER ? 'SET' : 'MISSING');
+  console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'SET' : 'MISSING');
+  console.log('MERCHANT_EMAIL:', process.env.MERCHANT_EMAIL ? 'SET' : 'MISSING');
+
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.MERCHANT_EMAIL) {
+    console.error('ERROR: Missing required email configuration. Emails cannot be sent.');
+    return;
+  }
+
   try {
     // Send customer email
+    console.log(`Sending confirmation email to customer: ${customerEmail}`);
     await emailTransporter.sendMail({
       from: process.env.EMAIL_USER,
       to: customerEmail,
       subject: `Order Confirmation - ${orderId}`,
       html: customerEmailHtml
     });
+    console.log('Customer email sent successfully');
 
     // Send merchant email
+    console.log(`Sending notification email to merchant: ${process.env.MERCHANT_EMAIL}`);
     await emailTransporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.MERCHANT_EMAIL,
       subject: `New Order - ${orderId}`,
       html: merchantEmailHtml
     });
+    console.log('Merchant email sent successfully');
 
-    console.log(`Confirmation emails sent for order ${orderId}`);
+    console.log(`✓ Confirmation emails sent for order ${orderId}`);
   } catch (emailError) {
-    console.error('Error sending emails:', emailError);
+    console.error('ERROR sending emails:', emailError.message);
+    console.error('Full error:', emailError);
   }
 }
 
