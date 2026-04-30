@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer').default || require('nodemailer');
 const { Resend } = require('resend');
 require('dotenv').config();
 console.log('NODE_ENV:', process.env.NODE_ENV);
@@ -57,41 +56,7 @@ process.env.STRIPE_WEBHOOK_SECRET
 // Parse JSON for all other routes
 app.use(express.json());
 
-// Lazy load email transporter to avoid ESM/CJS issues
-let emailTransporter = null;
-function getEmailTransporter() {
-  if (!emailTransporter) {
-    console.log('Creating email transporter...');
-    const nodemailerModule = require('nodemailer');
-    // Handle different nodemailer export patterns
-    let nodemailerLib = nodemailerModule;
-    if (nodemailerModule && nodemailerModule.default) {
-      nodemailerLib = nodemailerModule.default;
-    }
-    console.log('nodemailer lib:', typeof nodemailerLib);
-    // Check for createTransporter or createTransport
-    const createFn = nodemailerLib.createTransporter || nodemailerLib.createTransport;
-    if (!createFn) {
-      console.error('nodemailer module keys:', Object.keys(nodemailerModule));
-      if (nodemailerModule.default) {
-        console.error('default export keys:', Object.keys(nodemailerModule.default));
-      }
-      throw new Error('nodemailer createTransporter not found');
-    }
-    console.log('createFn:', typeof createFn);
-    emailTransporter = createFn({
-      host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT),
-      secure: parseInt(process.env.EMAIL_PORT) === 465,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
-    console.log('Transporter created:', typeof emailTransporter);
-  }
-  return emailTransporter;
-}
+// Note: nodemailer code removed - using Resend instead for email sending
 
 // Store orders temporarily (use database in production)
 const orders = new Map();
@@ -271,9 +236,11 @@ async function handleChargeRefunded(charge) {
       order.status = 'refunded';
       order.refundedAt = new Date();
 
-      await emailTransporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: order.customer.customerEmail || order.customer.email,
+// Send refund email using Resend
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from: 'Glereon Detailing Labs <onboarding@resend.dev>',
+        to: [order.customer.customerEmail || order.customer.email],
         subject: `Refund Processed - ${orderId}`,
         html: `
           <h2>Refund Confirmation</h2>
