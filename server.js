@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer').default || require('nodemailer');
 require('dotenv').config();
 console.log('NODE_ENV:', process.env.NODE_ENV);
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
