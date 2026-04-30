@@ -195,14 +195,18 @@ async function handleCheckoutSessionCompleted(session) {
   `;
 
 try {
-    // Use Resend for email sending (works on Railway)
+// Use Resend for email sending (works on Railway)
+    // Note: After verifying domain in resend.com, update the from address below
     console.log('RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'SET' : 'MISSING');
     const resend = new Resend(process.env.RESEND_API_KEY);
+    
+    // Use your verified domain after completing domain verification at resend.com/domains
+    const fromAddress = process.env.EMAIL_FROM || 'Glereon Detailing Labs <onboarding@resend.dev>';
     
     // Send customer email
     console.log(`Sending confirmation email to customer: ${customerEmail}`);
     const customerResult = await resend.emails.send({
-      from: 'Glereon Detailing Labs <onboarding@resend.dev>',
+      from: fromAddress,
       to: [customerEmail],
       subject: `Order Confirmation - ${orderId}`,
       html: customerEmailHtml
@@ -212,7 +216,7 @@ try {
     // Send merchant email
     console.log(`Sending notification email to merchant: ${merchantEmail}`);
     const merchantResult = await resend.emails.send({
-      from: 'Glereon Detailing Labs <onboarding@resend.dev>',
+      from: fromAddress,
       to: [merchantEmail],
       subject: `New Order - ${orderId}`,
       html: merchantEmailHtml
@@ -237,9 +241,10 @@ async function handleChargeRefunded(charge) {
       order.refundedAt = new Date();
 
 // Send refund email using Resend
+const fromAddress = process.env.EMAIL_FROM || 'Glereon Detailing Labs <onboarding@resend.dev>';
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
-        from: 'Glereon Detailing Labs <onboarding@resend.dev>',
+        from: fromAddress,
         to: [order.customer.customerEmail || order.customer.email],
         subject: `Refund Processed - ${orderId}`,
         html: `
