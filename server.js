@@ -60,10 +60,25 @@ app.use(express.json());
 let emailTransporter = null;
 function getEmailTransporter() {
   if (!emailTransporter) {
-    // Dynamic import to handle ESM/CJS compatibility
+    console.log('Creating email transporter...');
     const nodemailerModule = require('nodemailer');
-    const nodemailerLib = nodemailerModule.default || nodemailerModule;
-    emailTransporter = nodemailerLib.createTransporter({
+    // Handle different nodemailer export patterns
+    let nodemailerLib = nodemailerModule;
+    if (nodemailerModule && nodemailerModule.default) {
+      nodemailerLib = nodemailerModule.default;
+    }
+    console.log('nodemailer lib:', typeof nodemailerLib);
+    // Check for createTransporter or createTransport
+    const createFn = nodemailerLib.createTransporter || nodemailerLib.createTransport;
+    if (!createFn) {
+      console.error('nodemailer module keys:', Object.keys(nodemailerModule));
+      if (nodemailerModule.default) {
+        console.error('default export keys:', Object.keys(nodemailerModule.default));
+      }
+      throw new Error('nodemailer createTransporter not found');
+    }
+    console.log('createFn:', typeof createFn);
+    emailTransporter = createFn({
       host: process.env.EMAIL_HOST,
       port: parseInt(process.env.EMAIL_PORT),
       secure: parseInt(process.env.EMAIL_PORT) === 465,
@@ -72,6 +87,7 @@ function getEmailTransporter() {
         pass: process.env.EMAIL_PASS
       }
     });
+    console.log('Transporter created:', typeof emailTransporter);
   }
   return emailTransporter;
 }
