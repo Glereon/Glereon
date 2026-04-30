@@ -203,7 +203,7 @@ try {
     // Use your verified domain after completing domain verification at resend.com/domains
     const fromAddress = process.env.EMAIL_FROM || 'Glereon Detailing Labs <onboarding@resend.dev>';
     
-    // Send customer email
+// Send customer email
     console.log(`Sending confirmation email to customer: ${customerEmail}`);
     const customerResult = await resend.emails.send({
       from: fromAddress,
@@ -211,7 +211,10 @@ try {
       subject: `Order Confirmation - ${orderId}`,
       html: customerEmailHtml
     });
-    console.log('Customer email result:', customerResult);
+    console.log('Customer email result:', JSON.stringify(customerResult));
+    if (customerResult.error) {
+      console.error('CUSTOMER EMAIL FAILED:', customerResult.error.message);
+    }
 
     // Send merchant email
     console.log(`Sending notification email to merchant: ${merchantEmail}`);
@@ -221,7 +224,10 @@ try {
       subject: `New Order - ${orderId}`,
       html: merchantEmailHtml
     });
-    console.log('Merchant email result:', merchantResult);
+    console.log('Merchant email result:', JSON.stringify(merchantResult));
+    if (merchantResult.error) {
+      console.error('MERCHANT EMAIL FAILED:', merchantResult.error.message);
+    }
 
     console.log(`✓ Confirmation emails sent for order ${orderId}`);
   } catch (emailError) {
