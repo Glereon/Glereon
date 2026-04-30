@@ -56,16 +56,25 @@ process.env.STRIPE_WEBHOOK_SECRET
 // Parse JSON for all other routes
 app.use(express.json());
 
-// Email transporter
-const emailTransporter = nodemailer.createTransporter({
-  host: process.env.EMAIL_HOST,
-  port: parseInt(process.env.EMAIL_PORT),
-  secure: parseInt(process.env.EMAIL_PORT) === 465,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+// Lazy load email transporter to avoid ESM/CJS issues
+let emailTransporter = null;
+function getEmailTransporter() {
+  if (!emailTransporter) {
+    // Dynamic import to handle ESM/CJS compatibility
+    const nodemailerModule = require('nodemailer');
+    const nodemailerLib = nodemailerModule.default || nodemailerModule;
+    emailTransporter = nodemailerLib.createTransporter({
+      host: process.env.EMAIL_HOST,
+      port: parseInt(process.env.EMAIL_PORT),
+      secure: parseInt(process.env.EMAIL_PORT) === 465,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
   }
-});
+  return emailTransporter;
+}
 
 // Store orders temporarily (use database in production)
 const orders = new Map();
@@ -210,10 +219,11 @@ async function handleCheckoutSessionCompleted(session) {
     return;
   }
 
-  try {
+try {
     // Send customer email
     console.log(`Sending confirmation email to customer: ${customerEmail}`);
-    await emailTransporter.sendMail({
+    const transporter = getEmailTransporter();
+    await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: customerEmail,
       subject: `Order Confirmation - ${orderId}`,
@@ -223,7 +233,7 @@ async function handleCheckoutSessionCompleted(session) {
 
     // Send merchant email
     console.log(`Sending notification email to merchant: ${process.env.MERCHANT_EMAIL}`);
-    await emailTransporter.sendMail({
+    await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.MERCHANT_EMAIL,
       subject: `New Order - ${orderId}`,
