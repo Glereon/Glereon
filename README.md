@@ -6,22 +6,19 @@ This is the Glereon Detailing Labs e-commerce website with integrated Stripe pay
 
 ### 1. Stripe Account Setup
 1. Sign up for a Stripe account at [stripe.com](https://stripe.com)
-2. Complete account verification (much easier than Paysera - no company code required!)
+2. Complete account verification
 3. Get your API keys from the Stripe Dashboard:
    - **Publishable Key** (starts with `pk_test_` or `pk_live_`)
    - **Secret Key** (starts with `sk_test_` or `sk_live_`)
    - **Webhook Secret** (create in Dashboard → Webhooks)
 
-### 2. Email Setup (Hostinger Email)
-1. Your email is hosted on Hostinger, so use these SMTP settings:
-   ```
-   EMAIL_HOST=smtp.hostinger.com
-   EMAIL_PORT=465  # SSL port
-   EMAIL_USER=info@glereon.com
-   EMAIL_PASS=your_hostinger_email_password
-   MERCHANT_EMAIL=info@glereon.com
-   ```
-2. Use your regular email password
+### 2. Email Setup (Resend - Required for Railway)
+Railway blocks SMTP connections, so we use Resend API instead:
+1. Sign up at [resend.com](https://resend.com)
+2. Get your API key from the API Keys page
+3. (Optional) Verify your domain to send to any email address
+   - Without domain verification, you can only send to your own email (glereon123@gmail.com)
+   - With domain verified, you can send to customer@anydomain.com
 
 ### 3. Backend Setup
 1. Install Node.js (version 16 or higher)
@@ -29,63 +26,61 @@ This is the Glereon Detailing Labs e-commerce website with integrated Stripe pay
    ```bash
    npm install
    ```
-3. Copy `.env.example` to `.env` and fill in your credentials:
+3. Create `.env` file with these variables:
    ```
+   # Email (Resend) - REQUIRED
+   RESEND_API_KEY=re_123456789
+   EMAIL_FROM=info@glereon.com  # Must be a verified email or your verified domain
+   
+   # Merchant (order notifications)
+   MERCHANT_EMAIL=info@glereon.com
+
+   # Stripe
    STRIPE_SECRET_KEY=sk_test_your_secret_key
    STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key
    STRIPE_WEBHOOK_SECRET=whsec_test_your_webhook_secret
-   EMAIL_HOST=smtp.hostinger.com
-   EMAIL_PORT=465
-   EMAIL_USER=info@glereon.com
-   EMAIL_PASS=your_hostinger_email_password
-   MERCHANT_EMAIL=info@glereon.com
+
+   # Server
+   NODE_ENV=production
    PRODUCTION_URL=https://your-railway-url.com
+   PORT=8080
    ```
-4. Start the backend server:
+4. Start locally:
    ```bash
    npm start
    ```
 
 ### 4. Stripe Webhook Setup
-1. In Stripe Dashboard → Webhooks → Add endpoint
+1. In Stripe Dashboard → Developers → Webhooks → Add endpoint
 2. URL: `https://your-railway-url.com/api/stripe-webhook`
-3. Events to listen for:
-   - `checkout.session.completed`
-   - `charge.refunded`
-4. Copy the **Webhook Secret** to your `.env` file
+3. Select events: `checkout.session.completed`, `charge.refunded`
+4. Copy the **Webhook Secret** to your environment variables
 
-### 5. Update Frontend Code
-In `scripts/cartsystem.js`, replace `pk_test_YOUR_PUBLISHABLE_KEY` with your actual publishable key:
+### 5. Update Frontend
+In `scripts/cartsystem.js`, find and update the Stripe publishable key:
 ```javascript
 const stripe = Stripe('pk_test_your_actual_publishable_key');
 ```
 
-### 6. Deployment
-- Deploy to Railway (recommended)
-- Update `PRODUCTION_URL` in `.env` with your Railway URL
-- Test with Stripe test cards: `4242 4242 4242 4242`
+### 6. Deploy to Railway
+- Connect your GitHub repo to Railway
+- Add all environment variables in Railway dashboard
+- Test with card: `4242 4242 4242 4242`
 
 ## File Structure
-- `index.html` - Main page with cart functionality
-- `scripts/cartsystem.js` - Cart and checkout logic
-- `server.js` - Backend server with Stripe integration
+- `index.html` - Main product page
+- `scripts/cartsystem.js` - Cart & checkout logic
+- `server.js` - Backend with Stripe + Resend
 - `checkout-success.html` - Payment success page
-- `checkout-cancel.html` - Payment cancellation page
-- `styles/` - CSS stylesheets
+- `checkout-cancel.html` - Payment cancelled page
 
 ## Security Notes
-- Never expose your Stripe secret key in client-side code
+- Never expose Stripe secret key in client code
 - Always verify webhook signatures
 - Use HTTPS in production
-- Store order data securely in a database (currently stored in memory)
 
-## Email Notifications
-- **Customer**: Receives order confirmation with details
-- **Merchant**: Receives new order notification with customer info
-- Emails are sent automatically when payment is confirmed via Stripe webhooks
-- **Customer**: Receives order confirmation with details
-- **Merchant**: Receives new order notification with customer info
-- Emails are sent automatically when payment is confirmed via Paysera callback
-
-## Support
-For Paysera integration issues, refer to: https://developers.paysera.com/
+## Email Flow
+When payment is confirmed via Stripe:
+1. Stripe sends webhook to server
+2. Server sends order confirmation to customer
+3. Server notifies merchant at info@glereon.com

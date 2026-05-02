@@ -174,8 +174,88 @@
       background: #888;
     }
     
-    .empty-cart {
+.empty-cart {
       text-align: center;
       color: #888;
       font-style: italic;
+    }
+    
+    /* Delivery Section Styles */
+    .delivery-section {
+      margin: 1em 0;
+      padding: 1em;
+      background: #1a1f35;
+      border-radius: 5px;
+    }
+    
+    .delivery-section h3 {
+      color: #fe7300;
+      margin-bottom: 0.5em;
+    }
+    
+    .delivery-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
+    
+    .delivery-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75em;
+      background: #22263a;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .delivery-option:hover {
+      background: #2d3352;
+    }
+    
+.delivery-option input[type="radio"] {
+      accent-color: #fe7300;
+      margin-right: 0.5em;
+    }
+    
+    /* Locker Dropdown Styles */
+    .locker-dropdown {
+      margin-top: 0.75em;
+      padding: 0.75em;
+      background: #252b45;
+      border-radius: 4px;
+    }
+    
+    .locker-dropdown label {
+      display: block;
+      color: #fe7300;
+      margin-bottom: 0.5em;
+      font-weight: bold;
+    }
+    
+    .locker-dropdown select {
+      width: 100%;
+      padding: 0.5em;
+      margin-bottom: 0.5em;
+      background: #1a1f35;
+      color: white;
+      border: 1px solid #3a3f5c;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .locker-dropdown select:focus {
+      outline: none;
+      border-color: #fe7300;
+    }
+    
+    .delivery-name {
+      flex: 1;
+      color: white;
+    }
+    
+    .delivery-price {
+      color: #fe7300;
+      font-weight: bold;
     }

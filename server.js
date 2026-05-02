@@ -68,7 +68,7 @@ const BASE_URL = process.env.NODE_ENV === 'production'
 // Create checkout session
 app.post('/api/create-checkout-session', async (req, res) => {
   try {
-    const { items, customer, orderId } = req.body;
+    const { items, customer, orderId, delivery, subtotal } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ error: 'No items provided' });
@@ -87,6 +87,21 @@ app.post('/api/create-checkout-session', async (req, res) => {
       quantity: item.qty || item.quantity,
     }));
 
+    // Add delivery as a separate line item if selected
+    if (delivery && delivery.cost > 0) {
+      lineItems.push({
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: `Pristatymas: ${delivery.method}`,
+            description: 'Shipping/delivery fee',
+          },
+          unit_amount: Math.round(delivery.cost * 100),
+        },
+        quantity: 1,
+      });
+    }
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -100,6 +115,8 @@ app.post('/api/create-checkout-session', async (req, res) => {
         orderId: orderId,
         customerName: customer.name,
         customerEmail: customer.email,
+        deliveryMethod: delivery ? delivery.method : '',
+        deliveryCost: delivery ? delivery.cost.toString() : '0',
       },
       billing_address_collection: 'required',
       shipping_address_collection: {
@@ -107,12 +124,19 @@ app.post('/api/create-checkout-session', async (req, res) => {
       },
     });
 
+    // Calculate totals
+    const itemsTotal = items.reduce((sum, item) => sum + (item.price * (item.qty || item.quantity)), 0);
+    const deliveryCost = delivery ? delivery.cost : 0;
+    const total = itemsTotal + deliveryCost;
+
     // Store order info
     orders.set(orderId, {
       sessionId: session.id,
       customer: customer,
       items: items,
-      total: items.reduce((sum, item) => sum + (item.price * (item.qty || item.quantity)), 0),
+      delivery: delivery,
+      subtotal: itemsTotal,
+      total: total,
       status: 'pending',
       createdAt: new Date(),
     });
@@ -158,15 +182,21 @@ async function handleCheckoutSessionCompleted(session) {
     expand: ['payment_intent'],
   });
 
+// Get order for delivery info
+  const order = orders.get(orderId);
+  
   // Update order status
-  if (orders.has(orderId)) {
-    const order = orders.get(orderId);
+  if (order) {
     order.status = 'paid';
     order.stripeSessionId = session.id;
     order.paymentIntentId = fullSession.payment_intent?.id || null;
     order.paidAt = new Date();
   }
 
+  const deliveryHtml = order?.delivery ? `
+    <li>Pristatymas: ${order.delivery.method} - €${order.delivery.cost.toFixed(2)}</li>
+  ` : '';
+  
   // Send customer confirmation email
   const customerEmailHtml = `
     <h1>Thank you for your order!</h1>
@@ -175,9 +205,10 @@ async function handleCheckoutSessionCompleted(session) {
     <h2>Order Details:</h2>
     <p><strong>Order ID:</strong> ${orderId}</p>
     <ul>
-      ${orders.get(orderId)?.items.map(item =>
+      ${order?.items.map(item =>
         `<li>${item.name} - €${item.price} x ${item.qty || item.quantity} = €${(item.price * (item.qty || item.quantity)).toFixed(2)}</li>`
       ).join('')}
+      ${deliveryHtml}
     </ul>
     <p><strong>Total: €${(fullSession.amount_total / 100).toFixed(2)}</strong></p>
     <p>We will process your order shortly.</p>
@@ -190,6 +221,7 @@ async function handleCheckoutSessionCompleted(session) {
     <h2>Order Details:</h2>
     <p><strong>Order ID:</strong> ${orderId}</p>
     <p><strong>Customer:</strong> ${customerName} (${customerEmail})</p>
+    <p><strong>Delivery:</strong> ${order?.delivery?.method || 'Not selected'} (€${order?.delivery?.cost || 0})</p>
     <p><strong>Total:</strong> €${(fullSession.amount_total / 100).toFixed(2)}</p>
     <p><strong>Stripe Session ID:</strong> ${session.id}</p>
   `;
@@ -263,9 +295,76 @@ const fromAddress = process.env.EMAIL_FROM || 'Glereon Detailing Labs <onboardin
   }
 }
 
+// Omniva Locations API endpoint
+// Uses official Omniva API to fetch parcel lockers
+// Documentation: https://www.omniva.com/public/en/locations-search-api
+app.get('/api/omniva-lockers', async (req, res) => {
+  try {
+    const { country, city } = req.query;
+    
+    // Omniva API endpoint (public, no auth needed)
+    const omnivaUrl = 'https://locations.omniva.com/search';
+    
+    const params = new URLSearchParams();
+    if (country) params.append('country', country);
+    if (city) params.append('q', city);
+    
+    const response = await fetch(`${omnivaUrl}?${params.toString()}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Omniva API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Filter to only Lithuania parcel terminals (type = PT)
+    const parcelLockers = data
+      .filter(loc => loc.type === 'PT' && loc.country === 'LT')
+      .map(loc => ({
+        id: loc.ID,
+        name: loc.NAME,
+        city: loc.A1,
+        address: loc.A2,
+        zip: loc.ZIP
+      }));
+    
+    res.json({
+      success: true,
+      lockers: parcelLockers
+    });
+  } catch (error) {
+    console.error('Omniva API error:', error.message);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch parcel lockers'
+    });
+  }
+});
+
+// DPD Locations API endpoint (for future use - requires business contract)
+app.get('/api/dpd-lockers', async (req, res) => {
+  res.status(501).json({
+    success: false,
+    error: 'DPD API requires business contract. Contact DPD Lithuania.'
+  });
+});
+
+// Venipak Locations API endpoint (for future use - requires business contract)
+app.get('/api/venipak-lockers', async (req, res) => {
+  res.status(501).json({
+    success: false,
+    error: 'Venipak API requires business contract. Contact Venipak Lithuania.'
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'Server is running with Stripe integration' });
+  res.json({ status: 'Server is running with Stripe and delivery integration' });
 });
 
 // Block sensitive files

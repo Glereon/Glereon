@@ -47,6 +47,180 @@ const productNameTranslations = {
   }
 };
 
+// Delivery options with prices (simplified: to locker or to address)
+const deliveryOptions = [
+  { id: 'dpd_locker', name: 'DPD - To Locker', nameLt: 'DPD - Į paštomatą', price: 3.49, hasLockers: true },
+  { id: 'dpd_address', name: 'DPD - To Address', nameLt: 'DPD - Į adresą', price: 6.49, hasLockers: false },
+  { id: 'venipak_locker', name: 'Venipak - To Locker', nameLt: 'Venipak - Į paštomatą', price: 3.49, hasLockers: true },
+  { id: 'venipak_address', name: 'Venipak - To Address', nameLt: 'Venipak - Į adresą', price: 6.49, hasLockers: false },
+  { id: 'omniva_locker', name: 'Omniva - To Locker', nameLt: 'Omniva - Į paštomatą', price: 3.79, hasLockers: true },
+  { id: 'omniva_address', name: 'Omniva - To Address', nameLt: 'Omniva - Į adresą', price: 6.49, hasLockers: false }
+];
+
+let selectedDelivery = null;
+let selectedLocker = null;
+let omnivaLockers = []; // Will be populated from API
+
+// Fetch parcel lockers from Omniva API
+async function fetchOmnivaLockers() {
+  try {
+    const apiUrl = window.location.hostname.includes('localhost') 
+      ? '/api/omniva-lockers' 
+      : 'https://glereon-production.up.railway.app/api/omniva-lockers';
+    
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    
+    if (data.success && data.lockers) {
+      omnivaLockers = data.lockers;
+      console.log('Loaded', omnivaLockers.length, 'Omniva parcel lockers');
+    }
+  } catch (error) {
+    console.error('Failed to fetch Omniva lockers:', error);
+  }
+}
+
+// Get cities from omniva lockers
+function getLockerCities() {
+  const cities = [...new Set(omnivaLockers.map(l => l.city))];
+  return cities.sort();
+}
+
+// Get lockers by city
+function getLockersByCity(city) {
+  return omnivaLockers.filter(l => l.city === city);
+}
+
+function showLockerDropdown() {
+  const lang = getPageLanguage();
+  const isLt = lang === 'lt';
+  
+  // Remove existing dropdown if any
+  const existingDropdown = document.getElementById('lockerDropdown');
+  if (existingDropdown) {
+    existingDropdown.remove();
+  }
+  
+  // Remove existing selected locker
+  selectedLocker = null;
+  
+  // Group lockers by city from omnivaLockers (loaded from API)
+  const lockersByCity = omnivaLockers.reduce((acc, locker) => {
+    if (!acc[locker.city]) acc[locker.city] = [];
+    acc[locker.city].push(locker);
+    return acc;
+  }, {});
+  
+  const dropdownHtml = `
+    <div class="locker-dropdown" id="lockerDropdown">
+      <label>${isLt ? 'Pasirinkite paštomatą:' : 'Select parcel locker:'}</label>
+      <select id="lockerSelect">
+        <option value="">${isLt ? '-- Pasirinkite miestą --' : '-- Select city --'}</option>
+        ${Object.keys(lockersByCity).sort().map(city => 
+          `<option value="${city}">${city}</option>`
+        ).join('')}
+      </select>
+      <select id="lockerAddress" style="display:none;">
+        <option value="">${isLt ? '-- Pasirinkite adresą --' : '-- Select address --'}</option>
+      </select>
+    </div>
+  `;
+  
+  // Insert dropdown after delivery options
+  const deliveryOptionsEl = document.getElementById('deliveryOptions');
+  if (deliveryOptionsEl) {
+    deliveryOptionsEl.insertAdjacentHTML('afterend', dropdownHtml);
+    
+    const citySelect = document.getElementById('lockerSelect');
+    const addressSelect = document.getElementById('lockerAddress');
+    
+    citySelect.addEventListener('change', function() {
+      const selectedCity = this.value;
+      addressSelect.innerHTML = '<option value="">-- Pasirinkite adresą --</option>';
+      
+      if (selectedCity && lockersByCity[selectedCity]) {
+        lockersByCity[selectedCity].forEach(locker => {
+          addressSelect.innerHTML += `<option value="${locker.id}" data-address="${locker.address}" data-name="${locker.name}">${locker.address} - ${locker.name}</option>`;
+        });
+        addressSelect.style.display = 'block';
+      } else {
+        addressSelect.style.display = 'none';
+      }
+    });
+    
+    addressSelect.addEventListener('change', function() {
+      const option = this.options[this.selectedIndex];
+      if (option.value) {
+        selectedLocker = {
+          id: option.value,
+          name: option.dataset.name,
+          address: option.dataset.address
+        };
+      } else {
+        selectedLocker = null;
+      }
+    });
+  }
+}
+
+function hideLockerDropdown() {
+  const existingDropdown = document.getElementById('lockerDropdown');
+  if (existingDropdown) {
+    existingDropdown.remove();
+  }
+  selectedLocker = null;
+}
+
+function getDeliveryOptionsHtml() {
+  const lang = getPageLanguage();
+  const isLt = lang === 'lt';
+  
+  return deliveryOptions.map(opt => {
+    const name = isLt ? opt.nameLt : opt.name;
+    return `
+      <label class="delivery-option">
+        <input type="radio" name="delivery" value="${opt.id}" data-price="${opt.price}">
+        <span class="delivery-name">${name}</span>
+        <span class="delivery-price">${opt.price.toFixed(2)}€</span>
+      </label>
+    `;
+  }).join('');
+}
+
+function renderDeliveryOptions() {
+  const deliveryContainer = document.getElementById('deliveryOptions');
+  if (deliveryContainer) {
+    deliveryContainer.innerHTML = getDeliveryOptionsHtml();
+    
+    // Add event listeners to delivery options
+    document.querySelectorAll('input[name="delivery"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        selectedDelivery = deliveryOptions.find(d => d.id === this.value);
+        
+        // Show/hide locker dropdown based on selection
+        if (selectedDelivery && selectedDelivery.hasLockers) {
+          showLockerDropdown();
+        } else {
+          hideLockerDropdown();
+        }
+        
+        updateCartDisplay();
+      });
+    });
+  }
+}
+
+function getDeliveryCost() {
+  return selectedDelivery ? selectedDelivery.price : 0;
+}
+
+function getDeliveryName() {
+  if (!selectedDelivery) return '';
+  const lang = getPageLanguage();
+  const isLt = lang === 'lt';
+  return isLt ? selectedDelivery.nameLt : selectedDelivery.name;
+}
+
   // Cart functionality
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
@@ -149,9 +323,17 @@ const productNameTranslations = {
         
       }
 
-      // Update total
-      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+// Update total with delivery cost
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const deliveryCost = getDeliveryCost();
+      const total = subtotal + deliveryCost;
       cartTotal.textContent = total.toFixed(2);
+      
+      // Show/hide delivery selection if cart has items
+      const deliverySection = document.getElementById('deliverySection');
+      if (deliverySection) {
+        deliverySection.style.display = cart.length > 0 ? 'block' : 'none';
+      }
     }
 
     function updateQuantity(index, change) {
@@ -205,7 +387,7 @@ const productNameTranslations = {
         return;
       }
 
-      // Validate customer info
+// Validate customer info
       const name = document.getElementById('customerName').value.trim();
       const email = document.getElementById('customerEmail').value.trim();
       const phone = document.getElementById('customerPhone').value.trim();
@@ -216,18 +398,40 @@ const productNameTranslations = {
         return;
       }
 
-      // Calculate total
-      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+// Validate delivery selection
+      if (!selectedDelivery) {
+        alert('Please select a delivery method');
+        return;
+      }
       
-      // Prepare order data
+      // Validate locker selection if locker delivery was chosen
+      if (selectedDelivery && selectedDelivery.hasLockers) {
+        if (!selectedLocker) {
+          alert('Please select a parcel locker');
+          return;
+        }
+      }
+
+      // Calculate subtotal and total with delivery
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const deliveryCost = getDeliveryCost();
+      const total = subtotal + deliveryCost;
+      
+// Prepare order data
       const orderData = {
         items: cart,
+        subtotal: subtotal,
+        delivery: {
+          method: getDeliveryName(),
+          cost: deliveryCost,
+          locker: selectedLocker ? selectedLocker : null
+        },
         total: total,
         customer: {
           name: name,
           email: email,
           phone: phone,
-          address: address
+          address: selectedDelivery.hasLockers ? (selectedLocker ? selectedLocker.address : address) : address
         },
         orderId: 'ORDER-' + Date.now()
       };
@@ -268,9 +472,13 @@ const productNameTranslations = {
       console.log('Order data for manual processing:', orderData);
     }
 
-    // Initialize
+// Initialize
     document.addEventListener('DOMContentLoaded', function() {
+      // Fetch Omniva lockers from API on page load
+      fetchOmnivaLockers();
+      
       updateCartDisplay();
+      renderDeliveryOptions();
       
       // Static cart controls (attach once)
       document.getElementById("cartBtn").addEventListener("click", toggleCart);
