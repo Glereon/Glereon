@@ -92,8 +92,25 @@ You can also connect with us on social media for updates, tips, and offers.
         <!-- Cart items will be populated here -->
       </div>
       
-      <div class="cart-total">
+<div class="cart-total">
         <span data-translate="total">Total:</span><span id="cartTotal">0.00</span>€
+      </div>
+      
+      <!-- Delivery Selection -->
+      <div class="delivery-section" id="deliverySection" style="display: none;">
+        <h3 data-translate="delivery_method">Delivery Method</h3>
+        <div class="delivery-options" id="deliveryOptions">
+          <!-- Delivery options rendered by JavaScript -->
+        </div>
+      </div>
+      
+      <!-- Customer Information Form -->
+      <div class="customer-info" id="customerInfo" style="display: none;">
+        <h3 data-translate="customer_info">Customer Information</h3>
+        <input type="text" id="customerName" placeholder="Full Name *" required>
+        <input type="email" id="customerEmail" placeholder="Email Address *" required>
+        <input type="tel" id="customerPhone" placeholder="Phone Number *" required>
+        <textarea id="customerAddress" placeholder="Shipping Address *" rows="3" required></textarea>
       </div>
       
       <div class="cart-actions">

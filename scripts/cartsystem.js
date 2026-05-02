@@ -47,129 +47,17 @@ const productNameTranslations = {
   }
 };
 
-// Delivery options with prices (simplified: to locker or to address)
+// Delivery options with locker and address variants
 const deliveryOptions = [
-  { id: 'dpd_locker', name: 'DPD - To Locker', nameLt: 'DPD - Į paštomatą', price: 3.49, hasLockers: true },
-  { id: 'dpd_address', name: 'DPD - To Address', nameLt: 'DPD - Į adresą', price: 6.49, hasLockers: false },
-  { id: 'venipak_locker', name: 'Venipak - To Locker', nameLt: 'Venipak - Į paštomatą', price: 3.49, hasLockers: true },
-  { id: 'venipak_address', name: 'Venipak - To Address', nameLt: 'Venipak - Į adresą', price: 6.49, hasLockers: false },
-  { id: 'omniva_locker', name: 'Omniva - To Locker', nameLt: 'Omniva - Į paštomatą', price: 3.79, hasLockers: true },
-  { id: 'omniva_address', name: 'Omniva - To Address', nameLt: 'Omniva - Į adresą', price: 6.49, hasLockers: false }
+  { id: 'omniva_locker', name: 'Omniva - To Locker', nameLt: 'Omniva - Į paštomatą', price: 3.79, type: 'locker', lockerName: 'Omniva' },
+  { id: 'omniva_address', name: 'Omniva - To Address', nameLt: 'Omniva - Į adresą', price: 6.49, type: 'address', lockerName: 'Omniva' },
+  { id: 'venipak_locker', name: 'Venipak - To Locker', nameLt: 'Venipak - Į paštomatą', price: 3.49, type: 'locker', lockerName: 'Venipak' },
+  { id: 'venipak_address', name: 'Venipak - To Address', nameLt: 'Venipak - Į adresą', price: 6.49, type: 'address', lockerName: 'Venipak' },
+  { id: 'dpd_locker', name: 'DPD - To Locker', nameLt: 'DPD - Į paštomatą', price: 3.49, type: 'locker', lockerName: 'DPD' },
+  { id: 'dpd_address', name: 'DPD - To Address', nameLt: 'DPD - Į adresą', price: 6.49, type: 'address', lockerName: 'DPD' }
 ];
 
 let selectedDelivery = null;
-let selectedLocker = null;
-let omnivaLockers = []; // Will be populated from API
-
-// Fetch parcel lockers from Omniva API
-async function fetchOmnivaLockers() {
-  try {
-    const apiUrl = window.location.hostname.includes('localhost') 
-      ? '/api/omniva-lockers' 
-      : 'https://glereon-production.up.railway.app/api/omniva-lockers';
-    
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    
-    if (data.success && data.lockers) {
-      omnivaLockers = data.lockers;
-      console.log('Loaded', omnivaLockers.length, 'Omniva parcel lockers');
-    }
-  } catch (error) {
-    console.error('Failed to fetch Omniva lockers:', error);
-  }
-}
-
-// Get cities from omniva lockers
-function getLockerCities() {
-  const cities = [...new Set(omnivaLockers.map(l => l.city))];
-  return cities.sort();
-}
-
-// Get lockers by city
-function getLockersByCity(city) {
-  return omnivaLockers.filter(l => l.city === city);
-}
-
-function showLockerDropdown() {
-  const lang = getPageLanguage();
-  const isLt = lang === 'lt';
-  
-  // Remove existing dropdown if any
-  const existingDropdown = document.getElementById('lockerDropdown');
-  if (existingDropdown) {
-    existingDropdown.remove();
-  }
-  
-  // Remove existing selected locker
-  selectedLocker = null;
-  
-  // Group lockers by city from omnivaLockers (loaded from API)
-  const lockersByCity = omnivaLockers.reduce((acc, locker) => {
-    if (!acc[locker.city]) acc[locker.city] = [];
-    acc[locker.city].push(locker);
-    return acc;
-  }, {});
-  
-  const dropdownHtml = `
-    <div class="locker-dropdown" id="lockerDropdown">
-      <label>${isLt ? 'Pasirinkite paštomatą:' : 'Select parcel locker:'}</label>
-      <select id="lockerSelect">
-        <option value="">${isLt ? '-- Pasirinkite miestą --' : '-- Select city --'}</option>
-        ${Object.keys(lockersByCity).sort().map(city => 
-          `<option value="${city}">${city}</option>`
-        ).join('')}
-      </select>
-      <select id="lockerAddress" style="display:none;">
-        <option value="">${isLt ? '-- Pasirinkite adresą --' : '-- Select address --'}</option>
-      </select>
-    </div>
-  `;
-  
-  // Insert dropdown after delivery options
-  const deliveryOptionsEl = document.getElementById('deliveryOptions');
-  if (deliveryOptionsEl) {
-    deliveryOptionsEl.insertAdjacentHTML('afterend', dropdownHtml);
-    
-    const citySelect = document.getElementById('lockerSelect');
-    const addressSelect = document.getElementById('lockerAddress');
-    
-    citySelect.addEventListener('change', function() {
-      const selectedCity = this.value;
-      addressSelect.innerHTML = '<option value="">-- Pasirinkite adresą --</option>';
-      
-      if (selectedCity && lockersByCity[selectedCity]) {
-        lockersByCity[selectedCity].forEach(locker => {
-          addressSelect.innerHTML += `<option value="${locker.id}" data-address="${locker.address}" data-name="${locker.name}">${locker.address} - ${locker.name}</option>`;
-        });
-        addressSelect.style.display = 'block';
-      } else {
-        addressSelect.style.display = 'none';
-      }
-    });
-    
-    addressSelect.addEventListener('change', function() {
-      const option = this.options[this.selectedIndex];
-      if (option.value) {
-        selectedLocker = {
-          id: option.value,
-          name: option.dataset.name,
-          address: option.dataset.address
-        };
-      } else {
-        selectedLocker = null;
-      }
-    });
-  }
-}
-
-function hideLockerDropdown() {
-  const existingDropdown = document.getElementById('lockerDropdown');
-  if (existingDropdown) {
-    existingDropdown.remove();
-  }
-  selectedLocker = null;
-}
 
 function getDeliveryOptionsHtml() {
   const lang = getPageLanguage();
@@ -196,14 +84,6 @@ function renderDeliveryOptions() {
     document.querySelectorAll('input[name="delivery"]').forEach(radio => {
       radio.addEventListener('change', function() {
         selectedDelivery = deliveryOptions.find(d => d.id === this.value);
-        
-        // Show/hide locker dropdown based on selection
-        if (selectedDelivery && selectedDelivery.hasLockers) {
-          showLockerDropdown();
-        } else {
-          hideLockerDropdown();
-        }
-        
         updateCartDisplay();
       });
     });
@@ -219,6 +99,41 @@ function getDeliveryName() {
   const lang = getPageLanguage();
   const isLt = lang === 'lt';
   return isLt ? selectedDelivery.nameLt : selectedDelivery.name;
+}
+
+// Address validation function
+function validateAddress(address) {
+  if (!address || address.length < 10) {
+    return { valid: false, message: 'Address is too short' };
+  }
+  
+  // Check for minimum word count (street + number + city at minimum)
+  const words = address.split(/[\s,]+/).filter(w => w.length > 0);
+  if (words.length < 3) {
+    return { valid: false, message: 'Please enter a complete address (street, house number, city)' };
+  }
+  
+  // Check for house/apartment number (contains digits)
+  const hasNumber = /\d/.test(address);
+  if (!hasNumber) {
+    return { valid: false, message: 'Please include house/apartment number in address' };
+  }
+  
+  // Check for common Lithuanian cities/towns (for validation)
+  const validLithuaniaCities = /vilnius|kaunas|klaipėda|šiauliai|panevėžys|marijampolė|aurė|gargždai|druskininkai|gudobelė|rusnė|neris|šventoji|palanga|neringa|klaipėda|kretinga|smiltinė|šešupė|visaginas|utena|žemaitija|aukštaitija|suvalkija|dzūkija|lithuania/gi;
+  const isLithuanianAddress = validLithuaniaCities.test(address) || address.includes('lt');
+  
+// Check for street keywords
+  const streetKeywords = /street|str\.|gatvė|g-tė|avenue|ave|road|rd|kilometras|km|butas|buto|namas|namo|pastar|buto/gi;
+  const hasStreet = streetKeywords.test(address.toLowerCase());
+  
+  // If it looks too random (too many special chars or random letters), flag it
+  const specialCharRatio = (address.match(/[^a-zA-Z0-9ąčęėįšųūžĄČĘĖĮŠŲŪŽ\s,.-]/g) || []).length / address.length;
+  if (specialCharRatio > 0.3) {
+    return { valid: false, message: 'Please enter a valid address without special characters' };
+  }
+  
+  return { valid: true, message: 'Address looks valid' };
 }
 
   // Cart functionality
@@ -393,8 +308,15 @@ function getDeliveryName() {
       const phone = document.getElementById('customerPhone').value.trim();
       const address = document.getElementById('customerAddress').value.trim();
 
-      if (!name || !email || !address) {
+if (!name || !email || !phone || !address) {
         alert('Please fill in all required fields');
+        return;
+      }
+
+      // Validate address format
+      const addressValidation = validateAddress(address);
+      if (!addressValidation.valid) {
+        alert('Invalid address: ' + addressValidation.message + '\n\nPlease enter a valid address with street name, house number, and city.');
         return;
       }
 
@@ -402,14 +324,6 @@ function getDeliveryName() {
       if (!selectedDelivery) {
         alert('Please select a delivery method');
         return;
-      }
-      
-      // Validate locker selection if locker delivery was chosen
-      if (selectedDelivery && selectedDelivery.hasLockers) {
-        if (!selectedLocker) {
-          alert('Please select a parcel locker');
-          return;
-        }
       }
 
       // Calculate subtotal and total with delivery
@@ -423,15 +337,14 @@ function getDeliveryName() {
         subtotal: subtotal,
         delivery: {
           method: getDeliveryName(),
-          cost: deliveryCost,
-          locker: selectedLocker ? selectedLocker : null
+          cost: deliveryCost
         },
         total: total,
         customer: {
           name: name,
           email: email,
           phone: phone,
-          address: selectedDelivery.hasLockers ? (selectedLocker ? selectedLocker.address : address) : address
+          address: address
         },
         orderId: 'ORDER-' + Date.now()
       };
@@ -474,9 +387,6 @@ function getDeliveryName() {
 
 // Initialize
     document.addEventListener('DOMContentLoaded', function() {
-      // Fetch Omniva lockers from API on page load
-      fetchOmnivaLockers();
-      
       updateCartDisplay();
       renderDeliveryOptions();
       

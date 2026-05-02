@@ -119,8 +119,25 @@ atkreipkite dėmesį, kad mes perduodame duomenis, įskaitant asmens duomenis, �
         <!-- Cart items will be populated here -->
       </div>
       
-      <div class="cart-total">
+<div class="cart-total">
         <span data-translate="total">Viso:</span><span id="cartTotal">0.00</span>€
+      </div>
+      
+      <!-- Delivery Selection -->
+      <div class="delivery-section" id="deliverySection" style="display: none;">
+        <h3 data-translate="delivery_method">Pristatymo būdas</h3>
+        <div class="delivery-options" id="deliveryOptions">
+          <!-- Delivery options rendered by JavaScript -->
+        </div>
+      </div>
+      
+      <!-- Customer Information Form -->
+      <div class="customer-info" id="customerInfo" style="display: none;">
+        <h3 data-translate="customer_info">Kliento informacija</h3>
+        <input type="text" id="customerName" placeholder="Pilnas vardas *" required>
+        <input type="email" id="customerEmail" placeholder="El. pašto adresas *" required>
+        <input type="tel" id="customerPhone" placeholder="Telefono numeris *" required>
+        <textarea id="customerAddress" placeholder="Pristatymo adresas *" rows="3" required></textarea>
       </div>
       
       <div class="cart-actions">
