@@ -352,7 +352,7 @@ if (!name || !email || !phone || !address) {
       // Dynamic API URL for Railway backend
       const apiUrl = window.location.hostname.includes('localhost') ? '/api/create-checkout-session' : 'https://glereon-production.up.railway.app/api/create-checkout-session';
       
-      // Try to send to backend
+// Try to send to backend
       try {
         const response = await fetch(apiUrl, {
           method: 'POST',
@@ -362,16 +362,22 @@ if (!name || !email || !phone || !address) {
 
         if (response.ok) {
           const data = await response.json();
-          if (data.sessionId) {
-            // Redirect to Stripe Checkout
-            const stripe = Stripe('pk_test_51TQBk4JynRvgwp1ZpkLxId5Kkhwdcb6Zz8D0xXmV0irYSQyIWMDHoQyxXxbQ0ai9DDhwGeAz9ewYwijWbIH2A5nh00KdH4PxJR');
-            const result = await stripe.redirectToCheckout({
-              sessionId: data.sessionId
-            });
-            if (result.error) {
-              alert('Error: ' + result.error.message);
+          if (data.sessionId && data.sessionId.length > 0) {
+            // Redirect to Stripe Checkout only if we have a valid sessionId
+            if (typeof Stripe !== 'undefined') {
+              const stripe = Stripe('pk_test_51TQBk4JynRvgwp1ZpkLxId5Kkhwdcb6Zz8D0xXmV0irYSQyIWMDHoQyxXxbQ0ai9DDhwGeAz9ewYwijWbIH2A5nh00KdH4PxJR');
+              const result = await stripe.redirectToCheckout({
+                sessionId: data.sessionId
+              });
+              if (result.error) {
+                alert('Error: ' + result.error.message);
+              }
+              return;
+            } else {
+              console.log('Stripe.js not loaded. Order data:', orderData);
+              alert('Payment system is currently unavailable. Please try again later.');
+              return;
             }
-            return;
           }
         } else {
           console.error('Backend response:', response.status, response.statusText);
@@ -381,7 +387,7 @@ if (!name || !email || !phone || !address) {
       }
 
       // Fallback if backend not running
-      alert('Payment integration requires backend server. Check console for details.');
+      alert('Payment integration requires backend server. Order has been saved locally. Please contact us to complete your order.');
       console.log('Order data for manual processing:', orderData);
     }
 
