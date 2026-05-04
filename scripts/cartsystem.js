@@ -362,9 +362,9 @@ if (!name || !email || !phone || !address) {
 
         if (response.ok) {
           const data = await response.json();
-          if (data.sessionId && data.sessionId.length > 0) {
+if (data.sessionId && data.sessionId.length > 0) {
             // Redirect to Stripe Checkout only if we have a valid sessionId
-            if (typeof Stripe !== 'undefined') {
+            if (typeof Stripe === 'function') {
               const stripe = Stripe('pk_test_51TQBk4JynRvgwp1ZpkLxId5Kkhwdcb6Zz8D0xXmV0irYSQyIWMDHoQyxXxbQ0ai9DDhwGeAz9ewYwijWbIH2A5nh00KdH4PxJR');
               const result = await stripe.redirectToCheckout({
                 sessionId: data.sessionId
@@ -374,8 +374,8 @@ if (!name || !email || !phone || !address) {
               }
               return;
             } else {
-              console.log('Stripe.js not loaded. Order data:', orderData);
-              alert('Payment system is currently unavailable. Please try again later.');
+              console.warn('Stripe payment system unavailable. Order data logged:', orderData);
+              alert('Payment system is temporarily unavailable. Your order has been saved. Please contact us to complete your purchase.');
               return;
             }
           }
