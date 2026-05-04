@@ -350,7 +350,7 @@ if (!name || !email || !phone || !address) {
       };
 
       // Dynamic API URL for Railway backend
-      const apiUrl = window.location.hostname.includes('localhost') ? '/api/create-checkout-session' : 'https://glereon-production.up.railway.app/api/create-checkout-session';
+const apiUrl = 'https://glereon-production.up.railway.app/api/create-checkout-session';
       
 // Try to send to backend
       try {
