@@ -1,14 +1,26 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const { Resend } = require('resend');
 require('dotenv').config();
 console.log('NODE_ENV:', process.env.NODE_ENV);
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-
 const app = express();
 
-// Middleware
+// Security middleware - BEFORE other middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: false,  // Preserve HTML meta CSP
+  },
+  hsts: {
+    maxAge: 31536000,  // 1 year
+    includeSubDomains: true,
+    preload: true,
+  },
+}));
+
+// CORS after helmet
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' ? ['https://glereon.com'] : true
 }));
@@ -306,6 +318,14 @@ app.use((req, res, next) => {
   if (blockedPaths.includes(req.path)) {
     return res.status(403).send('Forbidden');
   }
+  next();
+});
+
+// Additional security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   next();
 });
 
