@@ -12,7 +12,7 @@
   default-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; 
   script-src  https://js.stripe.com 'self'; 
   img-src 'self' data: https://*.stripe.com;
-  script-src-elem 'self' https://js.stripe.com; 
+  script-src-elem 'self' https://js.stripe.com/v3/; 
   frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; 
   connect-src 'self' https://glereon-production.up.railway.app https://api.stripe.com https://checkout.stripe.com https://js.stripe.com;
   style-src 'self' 'unsafe-inline';
@@ -244,7 +244,7 @@
           <img class="bank-logo" src="logos/seb.png" alt="Bank Logo">
         </div>
    </footer>
-  <script src="scripts/stripe-loader.js" defer></script>
+  <script src="https://js.stripe.com/v3/"></script>
 
   <script src="scripts/slideshow.js"></script>
 
