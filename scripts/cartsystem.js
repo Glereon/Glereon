@@ -90,11 +90,24 @@ function renderDeliveryOptions() {
   }
 }
 
-function getDeliveryCost() {
-  return selectedDelivery ? selectedDelivery.price : 0;
+    function getDeliveryCost() {
+  if (!selectedDelivery) return 0;
+
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  const freeShippingThreshold = 50.0;
+
+  // Free shipping cost rule:
+  // - If subtotal >= €50, shipping becomes free.
+  if (subtotal >= freeShippingThreshold) {
+    return 0;
+  }
+
+  // Otherwise: no free shipping, pay selected delivery price
+  return selectedDelivery.price;
 }
 
-function getDeliveryName() {
+    function getDeliveryName() {
+
   if (!selectedDelivery) return '';
   const lang = getPageLanguage();
   const isLt = lang === 'lt';
@@ -243,6 +256,32 @@ function validateAddress(address) {
       const deliveryCost = getDeliveryCost();
       const total = subtotal + deliveryCost;
       cartTotal.textContent = total.toFixed(2);
+
+      // Free shipping message (re-render each time)
+      const existingFreeShipMsg = document.getElementById('freeShippingMessage');
+      if (existingFreeShipMsg) existingFreeShipMsg.remove();
+
+      const freeShippingThreshold = 50.0;
+
+      // Free shipping message:
+      // Show once cart subtotal (subtotal) reaches €50.
+      // (Address-based hiding handled in message rules elsewhere; per requirement we only track subtotal threshold.)
+      if (subtotal >= freeShippingThreshold) {
+        const msg = document.createElement('div');
+        msg.id = 'freeShippingMessage';
+        msg.style.marginTop = '8px';
+        msg.style.fontWeight = '600';
+        msg.style.color = '#0a7a1d';
+
+        const isLt = getPageLanguage() === 'lt';
+        msg.textContent = isLt
+          ? 'Nemokamas pristatymas nuo 50€ Lietuvoje!'
+          : 'Free shipping from €50 within Lithuania!';
+
+        const deliverySection = document.getElementById('deliverySection');
+        (deliverySection || cartItems).appendChild(msg);
+      }
+
       
       // Show/hide delivery selection if cart has items
       const deliverySection = document.getElementById('deliverySection');

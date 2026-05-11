@@ -30,12 +30,10 @@
         
         // Preload images for smoother transitions
         const images = [
-            'logos/welcomeadeng.png',
-            'logos/welcomeadlt.png',
-            'logos/Exterior ad eng.png',
-            'logos/Detailing redefined ad.png',
-            'logos/Glereon products side by side.png',
-            'logos/Detailing redefined ad LT.png'
+            'logos/nuolaidaENG.png',
+            'logos/freeshippingENG.png',
+            'logos/nuolaidaLT.png',
+            'logos/freeshippingLT.png'
         ];
         
         // Preload each image to prevent loading delays
@@ -43,3 +41,4 @@
             const img = new Image();
             img.src = src;
         });
+

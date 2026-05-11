@@ -16,12 +16,15 @@
     margin-left:10px;
     margin-bottom: 20px;
     margin-top: 20px;
-    
-
-    
-    
-    
 }
+
+.was-price {
+  color: #ff4d4d;
+  font-size: 16px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+    
 .product-image-main {
     width: 300px;
     height: 530px;
