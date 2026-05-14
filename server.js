@@ -19,10 +19,10 @@ app.use(helmet({
 }));
 
 // Set CSP manually
-app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "default-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; script-src https://js.stripe.com https://q.stripe.com 'self'; img-src 'self' data: https://*.stripe.com; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; connect-src 'self' https://glereon-production.up.railway.app https://api.stripe.com https://checkout.stripe.com https://js.stripe.com; style-src 'self' 'unsafe-inline';");
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('Content-Security-Policy', "default-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; script-src https://js.stripe.com https://q.stripe.com 'self'; img-src 'self' data: https://*.stripe.com; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; connect-src 'self' https://glereon-production.up.railway.app https://api.stripe.com https://checkout.stripe.com https://js.stripe.com; style-src 'self' 'unsafe-inline';");
+//   next();
+// });
 
 // CORS after helmet
 app.use(cors({
