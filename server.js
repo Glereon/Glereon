@@ -11,14 +11,7 @@ const app = express();
 // Security middleware - BEFORE other middleware
 app.use(helmet({
   contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'", "https://js.stripe.com", "https://hooks.stripe.com", "https://checkout.stripe.com"],
-      scriptSrc: ["https://js.stripe.com", "https://q.stripe.com", "'self'"],
-      imgSrc: ["'self'", "data:", "https://*.stripe.com"],
-      frameSrc: ["'self'", "https://js.stripe.com", "https://hooks.stripe.com", "https://checkout.stripe.com"],
-      connectSrc: ["'self'", "https://glereon-production.up.railway.app", "https://api.stripe.com", "https://checkout.stripe.com", "https://js.stripe.com"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-    },
+    directives: "default-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; script-src https://js.stripe.com https://q.stripe.com 'self'; img-src 'self' data: https://*.stripe.com; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; connect-src 'self' https://glereon-production.up.railway.app https://api.stripe.com https://checkout.stripe.com https://js.stripe.com; style-src 'self' 'unsafe-inline';",
   },
   hsts: {
     maxAge: 31536000,  // 1 year
