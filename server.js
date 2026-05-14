@@ -11,7 +11,14 @@ const app = express();
 // Security middleware - BEFORE other middleware
 app.use(helmet({
   contentSecurityPolicy: {
-    directives: false,  // Preserve HTML meta CSP
+    directives: {
+      defaultSrc: ["'self'", "https://js.stripe.com", "https://hooks.stripe.com", "https://checkout.stripe.com"],
+      scriptSrc: ["https://js.stripe.com", "https://q.stripe.com", "'self'"],
+      imgSrc: ["'self'", "data:", "https://*.stripe.com"],
+      frameSrc: ["'self'", "https://js.stripe.com", "https://hooks.stripe.com", "https://checkout.stripe.com"],
+      connectSrc: ["'self'", "https://glereon-production.up.railway.app", "https://api.stripe.com", "https://checkout.stripe.com", "https://js.stripe.com"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+    },
   },
   hsts: {
     maxAge: 31536000,  // 1 year
@@ -22,7 +29,9 @@ app.use(helmet({
 
 // CORS after helmet
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? ['https://glereon.com'] : true
+  origin: process.env.NODE_ENV === 'production'
+    ? ['https://glereon.com', 'https://glereon-production.up.railway.app']
+    : true
 }));
 
 // Stripe webhook handler needs RAW body before express.json()
